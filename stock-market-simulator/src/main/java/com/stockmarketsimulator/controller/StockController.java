@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -40,7 +41,7 @@ public class StockController {
         return userTradesService.findAllUserTrades();
     }
 
-    @GetMapping("/trade/{userId}")
+    @GetMapping("/gettrade/{userId}")
     public ResponseEntity<UserTrades> getUserTradesById(@PathVariable String userId) {
         UserTrades trade = userTradesService.getUserTradesById(userId);
         if (trade != null) {
@@ -58,7 +59,6 @@ public class StockController {
             // Update the user trades properties based on updatedUserTrades
             existingUserTrades.setUserId(updatedUserTrades.getUserId());
             existingUserTrades.setAmountDeposited(updatedUserTrades.getAmountDeposited());
-            existingUserTrades.setCurrentValue(updatedUserTrades.getCurrentValue());
             existingUserTrades.setTrades(updatedUserTrades.getTrades());
 
             // Update other properties as needed
@@ -72,19 +72,29 @@ public class StockController {
         }
     }
 
+    @PatchMapping("/updatetrade/{userId}")
+    public ResponseEntity<UserTrades> updateUserTrades(@PathVariable String userId, @RequestBody Map<String, Object> updates) {
+        UserTrades userTrades = userTradesService.updateUserTrades(userId, updates);
+
+        if (userTrades != null) {
+            return ResponseEntity.ok(userTrades);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/trade/{userId}")
     public ResponseEntity<String> deleteUserTradesById(@PathVariable String userId) {
         userTradesService.deleteById(userId);
         return ResponseEntity.ok("User trades deleted successfully");
     }
 
-
     @GetMapping("/stock")
     public ResponseEntity<String> fetchData(Model model) {
         RestTemplate restTemplate = new RestTemplate();
 
         String apiKey = "1TFBB3MQprW8K7Tsp6T765byKyLokbAZ";
-        LocalDate date = LocalDate.now().minusDays(3);
+        LocalDate date = LocalDate.now().minusDays(1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = date.format(formatter);
 

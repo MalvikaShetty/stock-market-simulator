@@ -13,18 +13,27 @@ public class UserTrades {
     @Id
     private String userId;
     private double amountDeposited;
-    private double currentValue;
     private List<Trade> trades;
+    private List<Sell> sell;
 
     @Data
     public static class Trade {
         private String stockSymbol;
-        private String stockName;
         private int quantityBought;
         private Date dateBought;
         private double priceBought;
         private int quantitySold;
         private Date dateSold;
         private double priceSold;
+        private double amountInvested;
+    }
+
+    @Data
+    public static class Sell {
+        private String stockSymbol;
+        private int quantitySold;
+        private Date dateSold;
+        private double priceSold;
+        private double amountDeinvested;
     }
 }
