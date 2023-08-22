@@ -1,0 +1,33 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Stock Data</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Stock Data</h1>-->
+<!--<p>Symbol: ${stock.symbol}</p>-->
+<!--<p>Name: ${stock.name}</p>-->
+<!--<p>Price: ${stock.currencySymbol} ${stock.quote.price}</p>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Data</title>
+</head>
+<body>
+<h1>Stock Data</h1>
+
+<div th:if="${error}">
+    <p>Error: <span th:text="${error}"></span></p>
+</div>
+
+<div th:if="${data}">
+    <pre th:text="${data}"></pre>
+</div>
+</body>
+</html>
+
