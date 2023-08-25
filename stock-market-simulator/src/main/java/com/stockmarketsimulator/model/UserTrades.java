@@ -14,26 +14,14 @@ public class UserTrades {
     private String userId;
     private double amountDeposited;
     private List<Trade> trades;
-    private List<Sell> sell;
 
     @Data
     public static class Trade {
         private String stockSymbol;
-        private int quantityBought;
-        private Date dateBought;
-        private double priceBought;
-        private int quantitySold;
-        private Date dateSold;
-        private double priceSold;
+        private String transactionType;
+        private int quantity;
+        private Date date;
+        private double price;
         private double amountInvested;
-    }
-
-    @Data
-    public static class Sell {
-        private String stockSymbol;
-        private int quantitySold;
-        private Date dateSold;
-        private double priceSold;
-        private double amountDeinvested;
     }
 }
