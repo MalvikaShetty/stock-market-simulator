@@ -23,11 +23,17 @@ const StocksList = () => {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  const openPopup = (ticker: any, price: any, date: any) => {
+  const openPopupBuy = (ticker: any, price: any, date: any) => {
     setSelectedTicker(ticker);
     setSelectedPrice(price);
     setSelectedDate(date);
     setShowBuyPopup(true);
+  };
+
+  const openPopupSell = (ticker: any, price: any, date: any) => {
+    setSelectedTicker(ticker);
+    setSelectedPrice(price);
+    setSelectedDate(date);
     setShowSellPopup(true);
   };
 
@@ -38,7 +44,12 @@ const StocksList = () => {
 
   const buyStock = (ticker: any, date: any) => {
     const price = stockData.find((dataPoint) => dataPoint.T === ticker)?.c || 0;
-    openPopup(ticker, price, date);
+    openPopupBuy(ticker, price, date);
+  };
+
+  const sellStock = (ticker: any, date: any) => {
+    const price = stockData.find((dataPoint) => dataPoint.T === ticker)?.c || 0;
+    openPopupSell(ticker, price, date);
   };
 
   const handleBuy = () => {
@@ -104,7 +115,7 @@ const StocksList = () => {
                     Buy
                   </button>
                   <button
-                    onClick={() => buyStock(dataPoint.T, dataPoint.t)}
+                    onClick={() => sellStock(dataPoint.T, dataPoint.t)}
                     className="border-1 bg-red-600 text-white px-4 py-2 rounded-lg"
                   >
                     Sell

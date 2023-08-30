@@ -9,6 +9,7 @@ import {
 import Dashboard from './pages/dashboard';
 import Navigation from './components/navigation';
 import StocksList from './pages/stockslist';
+import Dashboard2 from './pages/dashboard2';
 
 function App() {
   const PAGE_ROUTES = [
@@ -16,6 +17,11 @@ function App() {
     {
       name: "Home",
       path: "/",
+      component: Dashboard2,
+    },
+    {
+      name: "Home",
+      path: "/d",
       component: Dashboard,
     },
     {

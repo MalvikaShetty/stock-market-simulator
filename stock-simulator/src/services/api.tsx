@@ -34,14 +34,16 @@ const api = {
     return response.json();
   },
 
-  updateUserTradeById: async (id :any, updatedTrade :any) => {
-    const response = await fetch(`${BASE_URL}/updatetrade/${id}`, {
+  updateUserTradeById: async (userId :any, updatedTrade :any) => {
+    const response = await fetch(`${BASE_URL}/updatetrade/${userId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },    
       body: JSON.stringify(updatedTrade),   
     });
+
+    console.log(JSON.stringify(updatedTrade));
   
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -50,9 +52,13 @@ const api = {
     return response.json();
   },
 
-  getPortfolioById: async (id:any) => {
-    console.log(id);
-    const response = await fetch(`${BASE_URL}/portfolio/${id}`);
+  getPortfolioById: async (userid:any) => {
+    console.log(userid);
+    const response = await fetch(`${BASE_URL}/getportfoliosbyuserid/${userid}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -75,7 +81,21 @@ const api = {
     return response.json();
   },
 
-
+  updateUserPortfolioById: async (id :any, updatedPortfolio :any) => {
+    const response = await fetch(`${BASE_URL}/updateportfolio/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },    
+      body: JSON.stringify(updatedPortfolio),   
+    });
+  
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  
+    return response.json();
+  },
 
   //Call an api to get particular stock current price and 
   //then multiple with total stocks of that api to get current value

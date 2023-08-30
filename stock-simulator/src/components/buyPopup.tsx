@@ -80,7 +80,7 @@ const BuyPopup: React.FC<PopupProps> = ({ id, ticker, price, onClose }) => {
           value={quantity}
           onChange={handleQuantityChange}
         />
-        <p>Total Amount: {totalAmountPrice}</p>
+        <p>Total Amount: {totalAmountPrice.toFixed(2)}</p>
         <div className="mt-4 flex justify-end">
           <button
             className="mr-2 px-4 py-2 bg-gray-300 rounded-lg"
