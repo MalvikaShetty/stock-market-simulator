@@ -25,15 +25,30 @@ const api = {
     return response.json();
   },
 
-  getUserTradeById: async (id:any) => {
-    console.log(id);
-    const response = await fetch(`${BASE_URL}/gettrade/${id}`);
+  getAllTrades: async () => {
+    const response = await fetch(`${BASE_URL}/alltrades`);
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
     return response.json();
   },
 
+  getUserTradeById: async (userId:any) => {
+    const response = await fetch(`${BASE_URL}/gettrade/${userId}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  },
+
+  getUserTradeStatusById: async (userId:any) => {
+    const response = await fetch(`${BASE_URL}/gettradestatus/${userId}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  },
+  
   updateUserTradeById: async (userId :any, updatedTrade :any) => {
     const response = await fetch(`${BASE_URL}/updatetrade/${userId}`, {
       method: 'PATCH',
@@ -65,8 +80,8 @@ const api = {
     return response.json();
   },
 
-  postUserPortfolio: async (postData :any) => {
-    const response = await fetch(`${BASE_URL}/adduserportfolio`, {
+  postUserTrades: async (postData :any) => {
+    const response = await fetch(`${BASE_URL}/addusertrades`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -97,10 +112,50 @@ const api = {
     return response.json();
   },
 
-  //Call an api to get particular stock current price and 
-  //then multiple with total stocks of that api to get current value
+  updateUserPortfolioStockOnSell: async (userId:any, stockSymbol:any, newQuantity:any, newUpdateDate:any) => {
+    const queryString = `quantity=${newQuantity}&updateDate=${encodeURIComponent(newUpdateDate)}`;
+    const url = `${BASE_URL}/updateportfolio/${userId}/${stockSymbol}?${queryString}`;
+  
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  
+    return response.json();
+  },
 
-
+  // updateStatusUserTradesData : async (userId) =>{
+  //   api.updatesellstatus(userId);
+  // }
+  updateStatusUserTradesData: async (userId:any) => {
+    try {
+      const response = await fetch(`${BASE_URL}/updatesellstatus/${userId}`, {
+        method: 'PATCH', // Assuming you're using PATCH for updating the status
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      // Optionally, you can return the response data if needed
+      const responseData = await response.json();
+      return responseData;
+    } catch (error) {
+      console.error('Error updating status:', error);
+      throw error;
+    }
+  }
+  
+  
   // Other API functions for stocks and user trades...
 
 

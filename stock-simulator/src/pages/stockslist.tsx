@@ -3,7 +3,11 @@ import BuyPopup from "../components/buyPopup";
 import api from "../services/api";
 import SellPopup from "../components/sellPopup";
 
-const StocksList = () => {
+interface DashboardProps {
+  username : string;
+}
+
+const StocksList: React.FC<DashboardProps> = ({ username }) => {
   const [stockData, setStockData] = useState<Array<any>>([]);
   const [showBuyPopup, setShowBuyPopup] = useState(false);
   const [showSellPopup, setShowSellPopup] = useState(false);
@@ -79,7 +83,7 @@ const StocksList = () => {
               ticker={selectedTicker}
               price={selectedPrice}
               onClose={closePopup}
-              id={"user123"}
+              username={username}
             />
           )}
            {showSellPopup && (
@@ -87,7 +91,7 @@ const StocksList = () => {
               ticker={selectedTicker}
               price={selectedPrice}
               onClose={closePopup}
-              id={"user123"}
+              id={username}
             />
           )}
           <input

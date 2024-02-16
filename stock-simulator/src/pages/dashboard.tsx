@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import api from "../services/api";
 
-const Dashboard = () => {
+interface DashboardProps {
+  username? : string;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ username }) => {
   const [userTradesData, setUserTradesData] = useState<any>(null);
   const [stockData, setStockData] = useState<Array<any>>([]);
   const [portfolioData, setPortfolioData] = useState<Array<any>>([]);
@@ -19,7 +23,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     api
-      .getUserTradeById("user123")
+      .getUserTradeById(username)
       .then((data) => {
         setUserTradesData(data);
         setIsLoading(false);
@@ -46,19 +50,24 @@ const Dashboard = () => {
       const tickersToFilter: string[] = [];
 
       userTradesData.trades.forEach((trade: any) => {
-        const { stockSymbol, quantity, price, date, amountInvested } = trade;
+        const { stockSymbol, quantity, price, date, amountInvested, transactionType } = trade;
 
         if (!newData[stockSymbol]) {
           newData[stockSymbol] = {
-            totalQuantity: quantity,
-            totalInvestment: amountInvested,
+            totalQuantity: transactionType === "Sell" ? -quantity : quantity,
+            totalInvestment: transactionType === "Sell" ? -amountInvested : amountInvested,
             totalPrice: price * quantity,
             lastDate: date,
           };
           tickersToFilter.push(stockSymbol);
         } else {
-          newData[stockSymbol].totalQuantity += quantity;
-          newData[stockSymbol].totalInvestment += amountInvested;
+          if (transactionType === "Buy") {
+            newData[stockSymbol].totalQuantity += quantity;
+            newData[stockSymbol].totalInvestment += amountInvested;
+          } else if (transactionType === "Sell") {
+            newData[stockSymbol].totalQuantity -= quantity;
+            newData[stockSymbol].totalInvestment -= amountInvested;
+          }
           newData[stockSymbol].totalPrice += price * quantity;
           if (new Date(date) > new Date(newData[stockSymbol].lastDate)) {
             newData[stockSymbol].lastDate = date;
@@ -86,6 +95,7 @@ const Dashboard = () => {
         // const stockExistsInPortfolio = portfolioData.some((entry:any) =>
         //   entry.userPortfolio.some((item: { stockSymbol: string; }) => item.stockSymbol === stockSymbol)
         // );
+        
         const stockExistsInPortfolio =
           portfolioData &&
           portfolioData.some(
@@ -111,7 +121,7 @@ const Dashboard = () => {
         if (stockExistsInPortfolio) {
           // Update portfolio entry
           api
-            .updateUserTradeById("user123", updatedTrade)
+            .updateUserTradeById(username, updatedTrade)
             .then(() => {
               console.log("Portfolio entry updated:", stockSymbol);
             })
@@ -121,10 +131,7 @@ const Dashboard = () => {
         } else {
           // Add new portfolio entry
           api
-            .postUserPortfolio({
-              userId: "user123",
-              userPortfolio: [updatedTrade.userPortfolio[0]],
-            })
+            .postUserTrades(updatedTrade.userPortfolio[0])
             .then(() => {
               console.log("New portfolio entry added:", stockSymbol);
             })
