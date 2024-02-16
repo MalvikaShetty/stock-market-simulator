@@ -52,29 +52,10 @@ var api_1 = require("../services/api"); // Import your api module
 var SellPopup = function (_a) {
     var ticker = _a.ticker, price = _a.price, onClose = _a.onClose, username = _a.username;
     var _b = react_1.useState(1), quantity = _b[0], setQuantity = _b[1];
-    var _c = react_1.useState(null), portfolioData = _c[0], setPortfolioData = _c[1];
     var handleQuantityChange = function (event) {
         var newQuantity = parseInt(event.target.value, 10);
         setQuantity(newQuantity);
     };
-    //Call Portfolio API to check the amount if it exceeds later
-    // useEffect(() => {
-    //   api
-    //     .getUserTradeById(username)
-    //     .then((data) => {
-    //       setPortfolioData(data);
-    //       const totalAmount = (price * quantity) + (data.price * data.quantity);
-    //       // Check if the total amount exceeds the amount deposited
-    //       if (totalAmount > data.amountDeposited) {
-    //         console.error("Insufficient funds to buy.");
-    //         return;
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error fetching data:", error);
-    //       setPortfolioData(null);
-    //     });
-    // }, [price, quantity]);
     var formattedDate = new Date().toLocaleDateString("en-US");
     var totalAmountPrice = price * quantity;
     var handleSellClick = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -94,7 +75,7 @@ var SellPopup = function (_a) {
                     updatedTrades = existingPortfolioData.trades.map(function (trade) {
                         if (trade.stockSymbol === ticker) {
                             // If the stockSymbol matches, update the trade
-                            return __assign(__assign({}, trade), { quantity: trade.quantity - quantity, amountInvested: trade.amountInvested - (quantity * price) });
+                            return __assign(__assign({}, trade), { date: new Date(formattedDate).toISOString(), quantity: trade.quantity - quantity, amountInvested: trade.amountInvested - quantity * price });
                         }
                         else {
                             // Otherwise, keep the trade unchanged

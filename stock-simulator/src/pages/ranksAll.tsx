@@ -1,6 +1,8 @@
 // UserRankingPage.tsx
-import React, { useEffect, useState } from 'react';
-import api from '../services/api';
+import React, { useEffect, useState } from "react";
+import api from "../services/api";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faUser } from '@fortawesome/free-solid-svg-icons';
 
 const UserRankingPage: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -8,60 +10,49 @@ const UserRankingPage: React.FC = () => {
   const [filteredStockData, setFilteredStockData] = useState<Array<any>>([]);
 
   useEffect(() => {
-    // Fetch users and their data from the API
-    // const fetchAllUserTrades = async () => {
-    //   try {
-    //     api.getAllTrades().then(
-    //         (data)=>{
-    //         setUsers(data);
-    //         console.log(data, "Yay");
-    //         }
-    //     )
-    //   } catch (error) {
-    //     console.error('Error fetching users:', error);
-    //   }
-    // };
-
     const fetchAllUserTrades = () => {
-        api.getAllTrades()
-          .then(data => {
-            const objectsWithTradesAttribute = data.filter((obj : any) => obj.trades !== undefined && obj.trades !== null);
-            // const usersWithTrades = response.filter((user: { hasOwnProperty: (arg0: string) => any; }) => user.hasOwnProperty('trades'));
-            setUsers(objectsWithTradesAttribute);
-            console.log(objectsWithTradesAttribute, "Users with trades");
-          })
-          .catch(error => {
-            console.error('Error fetching users:', error);
-          });
-      };
-      
-      
+      api
+        .getAllTrades()
+        .then((data) => {
+          const objectsWithTradesAttribute = data.filter(
+            (obj: any) => obj.trades !== undefined && obj.trades !== null
+          );
+          // const usersWithTrades = response.filter((user: { hasOwnProperty: (arg0: string) => any; }) => user.hasOwnProperty('trades'));
+          setUsers(objectsWithTradesAttribute);
+          console.log(objectsWithTradesAttribute, "Users with trades");
+        })
+        .catch((error) => {
+          console.error("Error fetching users:", error);
+        });
+    };
 
     fetchAllUserTrades();
 
     api
-    .getStocks()
-    .then((data) => {
-      setStockData(data.results);
-      setFilteredStockData(data.results.slice(0, 12)); // Show first 10 results initially
-    })
-    .catch((error) => console.error("Error fetching data:", error));
-
+      .getStocks()
+      .then((data) => {
+        setStockData(data.results);
+        setFilteredStockData(data.results.slice(0, 12)); // Show first 10 results initially
+      })
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-    // Function to get current price for a stock symbol
-    const getCurrentPrice = (symbol: any) => {
-        const stock = stockData.find((dataPoint) => dataPoint.T === symbol);
-        return stock ? stock.o : "N/A";
-      };  
+  // Function to get current price for a stock symbol
+  const getCurrentPrice = (symbol: any) => {
+    const stock = stockData.find((dataPoint) => dataPoint.T === symbol);
+    return stock ? stock.o : "N/A";
+  };
 
   // Function to calculate the total unrealized gain/loss for a user
   const calculateTotalUnrealizedGainLoss = (trades: any[]) => {
     return trades.reduce((total, trade) => {
-      return total + ((trade.quantity * getCurrentPrice(trade.stockSymbol)) - trade.amountInvested);
+      return (
+        total +
+        (trade.quantity * getCurrentPrice(trade.stockSymbol) -
+          trade.amountInvested)
+      );
     }, 0);
   };
-
 
   // Function to rank users based on their total unrealized gain/loss
   const rankUsers = () => {
@@ -69,12 +60,16 @@ const UserRankingPage: React.FC = () => {
     const rankedUsers = [...users];
 
     // Calculate total unrealized gain/loss for each user and add it to the user object
-    rankedUsers.forEach(user => {
-      user.totalUnrealizedGainLoss = calculateTotalUnrealizedGainLoss(user.trades);
+    rankedUsers.forEach((user) => {
+      user.totalUnrealizedGainLoss = calculateTotalUnrealizedGainLoss(
+        user.trades
+      );
     });
 
     // Sort the users based on their total unrealized gain/loss
-    rankedUsers.sort((a, b) => b.totalUnrealizedGainLoss - a.totalUnrealizedGainLoss);
+    rankedUsers.sort(
+      (a, b) => b.totalUnrealizedGainLoss - a.totalUnrealizedGainLoss
+    );
 
     // Assign ranks to the sorted users
     rankedUsers.forEach((user, index) => {
@@ -87,7 +82,14 @@ const UserRankingPage: React.FC = () => {
   const rankedUsers = rankUsers();
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container">
+        <div className="bg-black py-2 flex justify-between items-center w-full">
+          <h2 className="ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide font-cambria">
+            Ranks of All Users
+          </h2>
+          <FontAwesomeIcon icon={faUser} color="white" size="1x" className="mr-4"/>
+        </div>
+    <div className="mx-auto p-4">
       <h1 className="text-3xl font-semibold mb-4">User Ranking</h1>
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead>
@@ -102,11 +104,14 @@ const UserRankingPage: React.FC = () => {
             <tr key={user.userId} className="border-t border-gray-300">
               <td className="py-2 pl-16">{user.rank}</td>
               <td className="py-2 pl-[10%]">{user.userId}</td>
-              <td className="py-2 pl-[24%]">${user.totalUnrealizedGainLoss.toFixed(2)}</td>
+              <td className="py-2 pl-[24%]">
+                ${user.totalUnrealizedGainLoss.toFixed(2)}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+    </div>
     </div>
   );
 };

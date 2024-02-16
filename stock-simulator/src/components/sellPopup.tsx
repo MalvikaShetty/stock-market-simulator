@@ -8,72 +8,58 @@ interface PopupProps {
   username: string;
 }
 
-const SellPopup: React.FC<PopupProps> = ({ ticker, price, onClose, username }) => {
+const SellPopup: React.FC<PopupProps> = ({
+  ticker,
+  price,
+  onClose,
+  username,
+}) => {
   const [quantity, setQuantity] = useState<number>(1);
-  const [portfolioData, setPortfolioData] = useState<any>(null);
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newQuantity = parseInt(event.target.value, 10);
     setQuantity(newQuantity);
   };
-  //Call Portfolio API to check the amount if it exceeds later
-  // useEffect(() => {
-  //   api
-  //     .getUserTradeById(username)
-  //     .then((data) => {
-  //       setPortfolioData(data);
-  //       const totalAmount = (price * quantity) + (data.price * data.quantity);
-    
-  //       // Check if the total amount exceeds the amount deposited
-  //       if (totalAmount > data.amountDeposited) {
-  //         console.error("Insufficient funds to buy.");
-  //         return;
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //       setPortfolioData(null);
-  //     });
-  // }, [price, quantity]);
 
   const formattedDate = new Date().toLocaleDateString("en-US");
   const totalAmountPrice = price * quantity;
 
   const handleSellClick = async () => {
     try {
-  
-        const existingPortfolioStatus = await api.getUserTradeStatusById(username);
-        console.log(existingPortfolioStatus, "existingPortfolioStatus")
-  
-        if (existingPortfolioStatus === true) {
-          // Portfolio exists, update trades
-          const existingPortfolioData = await api.getUserTradeById(username);
-          const updatedTrades = existingPortfolioData.trades.map((trade : any) => {
-              if (trade.stockSymbol === ticker) {
-                  // If the stockSymbol matches, update the trade
-                  return {
-                      ...trade,
-                      quantity: trade.quantity - quantity,
-                      amountInvested: trade.amountInvested - (quantity * price),
-                  };
-              } else {
-                  // Otherwise, keep the trade unchanged
-                  return trade;
-              }
-          });
-      
-          const response = await api.updateUserTradeById(username, updatedTrades);
-          console.log("Response from PATCH request:", response);
+      const existingPortfolioStatus = await api.getUserTradeStatusById(
+        username
+      );
+      console.log(existingPortfolioStatus, "existingPortfolioStatus");
+
+      if (existingPortfolioStatus === true) {
+        // Portfolio exists, update trades
+        const existingPortfolioData = await api.getUserTradeById(username);
+        const updatedTrades = existingPortfolioData.trades.map((trade: any) => {
+          if (trade.stockSymbol === ticker) {
+            // If the stockSymbol matches, update the trade
+            return {
+              ...trade,
+              date: new Date(formattedDate).toISOString(),
+              quantity: trade.quantity - quantity,
+              amountInvested: trade.amountInvested - quantity * price,
+            };
+          } else {
+            // Otherwise, keep the trade unchanged
+            return trade;
+          }
+        });
+
+        const response = await api.updateUserTradeById(username, updatedTrades);
+        console.log("Response from PATCH request:", response);
       } else {
-            // Portfolio doesn't exist, create new
-            
-            console.log("Cannot process");
-          
-        }
-  
-        onClose();
+        // Portfolio doesn't exist, create new
+
+        console.log("Cannot process");
+      }
+
+      onClose();
     } catch (error) {
-        console.error("Error updating user trades:", error);
+      console.error("Error updating user trades:", error);
     }
   };
 

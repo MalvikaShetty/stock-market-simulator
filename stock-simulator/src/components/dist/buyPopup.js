@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,13 +46,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 exports.__esModule = true;
 var react_1 = require("react");
 var api_1 = require("../services/api");
@@ -52,8 +56,11 @@ var BuyPopup = function (_a) {
         var newQuantity = parseInt(event.target.value, 10);
         setQuantity(newQuantity);
     };
+    var totalAmountPrice = 0; // Initialize totalAmountPrice with 0
+    if (quantity !== 0) {
+        totalAmountPrice = price * quantity; // Calculate total amount price only if quantity is not 0
+    }
     var formattedDate = new Date().toLocaleDateString("en-US");
-    var totalAmountPrice = price * quantity;
     // Inside handleBuyClick function
     var handleBuyClick = function () { return __awaiter(void 0, void 0, void 0, function () {
         var existingPortfolioStatus, existingPortfolioData, updatedTrades, response, data, response, error_1;
@@ -69,17 +76,33 @@ var BuyPopup = function (_a) {
                     return [4 /*yield*/, api_1["default"].getUserTradeById(username)];
                 case 2:
                     existingPortfolioData = _a.sent();
-                    updatedTrades = __spreadArrays(existingPortfolioData.trades, [
-                        {
-                            stockSymbol: ticker,
-                            transactionType: "Buy",
-                            quantity: quantity,
-                            date: new Date(formattedDate).toISOString(),
-                            price: price,
-                            amountInvested: quantity * price,
-                            status: true
-                        }
-                    ]);
+                    updatedTrades = void 0;
+                    if (existingPortfolioData.trades) {
+                        updatedTrades = existingPortfolioData.trades.map(function (trade) {
+                            if (trade.stockSymbol === ticker) {
+                                // If the stockSymbol matches, update the trade
+                                return __assign(__assign({}, trade), { date: new Date(formattedDate).toISOString(), quantity: trade.quantity + quantity, price: (trade.amountInvested + quantity * price) / (trade.quantity + quantity), amountInvested: trade.amountInvested + (quantity * price) });
+                            }
+                            else {
+                                // Otherwise, keep the trade unchanged
+                                return trade;
+                            }
+                        });
+                    }
+                    else {
+                        // If existingPortfolioData.trades is null, initialize updatedTrades with an empty array
+                        updatedTrades = [
+                            {
+                                stockSymbol: ticker,
+                                transactionType: "Buy",
+                                quantity: quantity,
+                                date: new Date(formattedDate).toISOString(),
+                                price: price,
+                                amountInvested: quantity * price,
+                                status: true
+                            }
+                        ];
+                    }
                     return [4 /*yield*/, api_1["default"].updateUserTradeById(username, updatedTrades)];
                 case 3:
                     response = _a.sent();

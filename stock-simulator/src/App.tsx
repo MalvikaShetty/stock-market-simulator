@@ -5,10 +5,9 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import Dashboard from './pages/dashboard';
 import Navigation from './components/navigation';
 import StocksList from './pages/stockslist';
-import Dashboard2 from './pages/dashboard2';
+import Dashboard from './pages/dashboard';
 import Login from './pages/login';
 import SignUpPage from './pages/signup';
 import UserRankingPage from './pages/ranksAll';
@@ -28,11 +27,6 @@ function App() {
     {
       name: "Home",
       path: "/",
-      component: () => (<Dashboard2 username={username} />),
-    },
-    {
-      name: "Home",
-      path: "/d",
       component: () => (<Dashboard username={username} />),
     },
     {
@@ -85,6 +79,7 @@ function App() {
           />
         ))}
       </Routes>
+      <div className="flex">
       <Navigation isLoggedIn={isLoggedIn} username={username} onLogout={handleLogout} />
       <Routes>
         {PAGE_ROUTES.map((page) => (
@@ -95,6 +90,7 @@ function App() {
           />
         ))}
       </Routes>
+      </div>
     </>
   );
 }
