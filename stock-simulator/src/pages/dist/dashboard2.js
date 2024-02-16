@@ -90,6 +90,6 @@ var Dashboard2 = function (_a) {
                     "$",
                     ((entry.quantity * getCurrentPrice(entry.stockSymbol) - entry.amountInvested)).toFixed(2)),
                 react_1["default"].createElement("td", { className: "border border-green-800 px-4 py-2" }, entry.date))); })) : (react_1["default"].createElement("tr", null,
-                react_1["default"].createElement("td", { colSpan: 6 }, "No portfolio data available"))))))) : (react_1["default"].createElement("p", null, "No Data Yet"))));
+                react_1["default"].createElement("td", { colSpan: 6 }, "No portfolio data available"))))))) : (react_1["default"].createElement("h2", null, "No Data Yet"))));
 };
 exports["default"] = Dashboard2;

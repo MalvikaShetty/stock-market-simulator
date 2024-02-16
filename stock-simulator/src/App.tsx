@@ -19,8 +19,8 @@ function App() {
  
    const handleLogout = () => {
      // Perform logout logic here (e.g., clear authentication token)
-     setIsLoggedIn(false);
-     setUsername(""); // Clear the username state upon logout
+    //  setIsLoggedIn(false);
+    //  setUsername(""); // Clear the username state upon logout
    };
    
   const PAGE_ROUTES = [
@@ -65,11 +65,27 @@ function App() {
   ]
 
   // eslint-disable-next-line no-restricted-globals
-  const showNavigation = !['/login', '/signup'].includes(location.pathname);
+  // const showNavigation = !['/login', '/signup'].includes(location.pathname);
   
   return (
     <>
-      {showNavigation && <Navigation isLoggedIn={isLoggedIn} username={username} onLogout={handleLogout} />}
+       <Routes>
+        {PAGE_ROUTES.map((page) => (
+          <Route
+            key="/login"
+            path="/login"
+            element={
+              <Login
+                onLogin={(username) => {
+                  setUsername(username); // Update the username state
+                  setIsLoggedIn(true); // Update the login status
+                }}
+              />
+            }
+          />
+        ))}
+      </Routes>
+      <Navigation isLoggedIn={isLoggedIn} username={username} onLogout={handleLogout} />
       <Routes>
         {PAGE_ROUTES.map((page) => (
           <Route

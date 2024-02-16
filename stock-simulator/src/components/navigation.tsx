@@ -17,6 +17,7 @@ const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, username, onLogout 
   };
 
   return (
+    <>
     <nav className="bg-black text-white p-4 flex space-x-8">
       {isLoggedIn && (
         <>
@@ -50,15 +51,26 @@ const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, username, onLogout 
           </Link>
         </>
       )}
-      {!isLoggedIn && (
-        <Link
-          to="/login"
-          className="text-lg hover:text-blue-500 transition duration-300 mt-4"
-        >
-          Login
-        </Link>
-      )}
     </nav>
+      {!isLoggedIn && (
+        <>
+        <div className="flex justify-center mt-4">
+          <Link
+            to="/login"
+            className="text-lg hover:text-blue-500 transition duration-300"
+          >
+            Login
+          </Link>
+          <Link
+            to="/signup"
+            className="text-lg hover:text-blue-500 transition duration-300 ml-4"
+          >
+            Sign Up
+          </Link>
+        </div>
+      </>
+      )}
+      </>
   );
 };
 

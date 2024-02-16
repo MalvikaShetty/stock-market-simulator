@@ -63,7 +63,7 @@ var StocksList = function (_a) {
     return (react_1["default"].createElement("div", null, stockData.length === 0 ? (react_1["default"].createElement("p", { className: "text-center m-10 text-[40px]" }, "Loading Stocks List...")) : (react_1["default"].createElement(react_1["default"].Fragment, null,
         react_1["default"].createElement("h1", { className: "text-2xl font-semibold mb-4 text-center" }, "Stocks List"),
         showBuyPopup && (react_1["default"].createElement(buyPopup_1["default"], { ticker: selectedTicker, price: selectedPrice, onClose: closePopup, username: username })),
-        showSellPopup && (react_1["default"].createElement(sellPopup_1["default"], { ticker: selectedTicker, price: selectedPrice, onClose: closePopup, id: username })),
+        showSellPopup && (react_1["default"].createElement(sellPopup_1["default"], { ticker: selectedTicker, price: selectedPrice, onClose: closePopup, username: username })),
         react_1["default"].createElement("input", { type: "text", placeholder: "Search by Ticker", value: searchTerm, onChange: function (e) { return handleSearch(e.target.value); }, className: "border-2 rounded-lg p-2 mb-4 ml-[36%] w-[400px]" }),
         react_1["default"].createElement("ul", { className: "flex flex-wrap" }, filteredStockData.map(function (dataPoint, index) { return (react_1["default"].createElement("li", { key: index, className: "ml-16 mb-8 p-10 border-2 rounded-lg w-[300px] text-center" },
             react_1["default"].createElement("p", { className: "text-lg font-semibold mb-2" },

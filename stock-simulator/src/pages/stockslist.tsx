@@ -91,7 +91,7 @@ const StocksList: React.FC<DashboardProps> = ({ username }) => {
               ticker={selectedTicker}
               price={selectedPrice}
               onClose={closePopup}
-              id={username}
+              username={username}
             />
           )}
           <input

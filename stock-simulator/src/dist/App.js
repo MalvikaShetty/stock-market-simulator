@@ -15,8 +15,8 @@ function App() {
     var _b = react_1.useState(""), username = _b[0], setUsername = _b[1]; // State to store the username
     var handleLogout = function () {
         // Perform logout logic here (e.g., clear authentication token)
-        setIsLoggedIn(false);
-        setUsername(""); // Clear the username state upon logout
+        //  setIsLoggedIn(false);
+        //  setUsername(""); // Clear the username state upon logout
     };
     var PAGE_ROUTES = [
         // COMMON PAGES
@@ -55,9 +55,13 @@ function App() {
         },
     ];
     // eslint-disable-next-line no-restricted-globals
-    var showNavigation = !['/login', '/signup'].includes(location.pathname);
+    // const showNavigation = !['/login', '/signup'].includes(location.pathname);
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
-        showNavigation && react_1["default"].createElement(navigation_1["default"], { isLoggedIn: isLoggedIn, username: username, onLogout: handleLogout }),
+        react_1["default"].createElement(react_router_dom_1.Routes, null, PAGE_ROUTES.map(function (page) { return (react_1["default"].createElement(react_router_dom_1.Route, { key: "/login", path: "/login", element: react_1["default"].createElement(login_1["default"], { onLogin: function (username) {
+                    setUsername(username); // Update the username state
+                    setIsLoggedIn(true); // Update the login status
+                } }) })); })),
+        react_1["default"].createElement(navigation_1["default"], { isLoggedIn: isLoggedIn, username: username, onLogout: handleLogout }),
         react_1["default"].createElement(react_router_dom_1.Routes, null, PAGE_ROUTES.map(function (page) { return (react_1["default"].createElement(react_router_dom_1.Route, { key: page.path, path: page.path, element: react_1["default"].createElement(page.component, null) })); }))));
 }
 exports["default"] = App;

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import api from "../services/api"; // Import your api module
 
 interface PopupProps {
-  id: string;
   ticker: string;
   price: number;
   onClose: () => void;
+  username: string;
 }
 
-const SellPopup: React.FC<PopupProps> = ({ id, ticker, price, onClose }) => {
+const SellPopup: React.FC<PopupProps> = ({ ticker, price, onClose, username }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [portfolioData, setPortfolioData] = useState<any>(null);
 
@@ -17,54 +17,63 @@ const SellPopup: React.FC<PopupProps> = ({ id, ticker, price, onClose }) => {
     setQuantity(newQuantity);
   };
   //Call Portfolio API to check the amount if it exceeds later
-  useEffect(() => {
-    api
-      .getPortfolioById("user123")
-      .then((data) => {
-        setPortfolioData(data);
-        const totalAmount = (price * quantity) + (data.price * data.quantity);
+  // useEffect(() => {
+  //   api
+  //     .getUserTradeById(username)
+  //     .then((data) => {
+  //       setPortfolioData(data);
+  //       const totalAmount = (price * quantity) + (data.price * data.quantity);
     
-        // Check if the total amount exceeds the amount deposited
-        if (totalAmount > data.amountDeposited) {
-          console.error("Insufficient funds to buy.");
-          return;
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setPortfolioData(null);
-      });
-  }, [price, quantity]);
+  //       // Check if the total amount exceeds the amount deposited
+  //       if (totalAmount > data.amountDeposited) {
+  //         console.error("Insufficient funds to buy.");
+  //         return;
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //       setPortfolioData(null);
+  //     });
+  // }, [price, quantity]);
 
   const formattedDate = new Date().toLocaleDateString("en-US");
   const totalAmountPrice = price * quantity;
 
-  const handleBuyClick = async () => {
+  const handleSellClick = async () => {
     try {
-      const updatedTrade = {
-        trades: [
-          {
-            stockSymbol: ticker,
-            transactionType: "Sell",
-            quantity: quantity, // Update quantity bought
-            date: new Date(formattedDate), // Replace with the appropriate date
-            price: price, // Replace with the appropriate price
-            amountInvested: quantity * price, // Update amount invested
-          }
-        ]
-      };
-
-      // const updatedTradesArray = [...userTradesData.trades, updatedTrade];
-      console.log(updatedTrade); 
-      console.log(id); 
-
-      const updatedData = await api.updateUserTradeById(id, updatedTrade);
-
-      console.log("Updated data:", updatedData);
-      onClose();
-
+  
+        const existingPortfolioStatus = await api.getUserTradeStatusById(username);
+        console.log(existingPortfolioStatus, "existingPortfolioStatus")
+  
+        if (existingPortfolioStatus === true) {
+          // Portfolio exists, update trades
+          const existingPortfolioData = await api.getUserTradeById(username);
+          const updatedTrades = existingPortfolioData.trades.map((trade : any) => {
+              if (trade.stockSymbol === ticker) {
+                  // If the stockSymbol matches, update the trade
+                  return {
+                      ...trade,
+                      quantity: trade.quantity - quantity,
+                      amountInvested: trade.amountInvested - (quantity * price),
+                  };
+              } else {
+                  // Otherwise, keep the trade unchanged
+                  return trade;
+              }
+          });
+      
+          const response = await api.updateUserTradeById(username, updatedTrades);
+          console.log("Response from PATCH request:", response);
+      } else {
+            // Portfolio doesn't exist, create new
+            
+            console.log("Cannot process");
+          
+        }
+  
+        onClose();
     } catch (error) {
-      console.error("Error updating user trades:", error);
+        console.error("Error updating user trades:", error);
     }
   };
 
@@ -90,7 +99,7 @@ const SellPopup: React.FC<PopupProps> = ({ id, ticker, price, onClose }) => {
           </button>
           <button
             className="px-4 py-2 bg-black text-white rounded-lg"
-            onClick={handleBuyClick}
+            onClick={handleSellClick}
           >
             Sell
           </button>

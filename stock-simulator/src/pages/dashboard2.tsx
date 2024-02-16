@@ -152,7 +152,7 @@ const Dashboard2: React.FC<DashboardProps> = ({ username }) => {
           </table>
         </div>
       ) : (
-        <p>No Data Yet</p>
+        <h2>No Data Yet</h2>
       )}
     </>
   );

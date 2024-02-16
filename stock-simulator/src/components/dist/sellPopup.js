@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,7 +50,7 @@ exports.__esModule = true;
 var react_1 = require("react");
 var api_1 = require("../services/api"); // Import your api module
 var SellPopup = function (_a) {
-    var id = _a.id, ticker = _a.ticker, price = _a.price, onClose = _a.onClose;
+    var ticker = _a.ticker, price = _a.price, onClose = _a.onClose, username = _a.username;
     var _b = react_1.useState(1), quantity = _b[0], setQuantity = _b[1];
     var _c = react_1.useState(null), portfolioData = _c[0], setPortfolioData = _c[1];
     var handleQuantityChange = function (event) {
@@ -47,56 +58,66 @@ var SellPopup = function (_a) {
         setQuantity(newQuantity);
     };
     //Call Portfolio API to check the amount if it exceeds later
-    react_1.useEffect(function () {
-        api_1["default"]
-            .getPortfolioById("user123")
-            .then(function (data) {
-            setPortfolioData(data);
-            var totalAmount = (price * quantity) + (data.price * data.quantity);
-            // Check if the total amount exceeds the amount deposited
-            if (totalAmount > data.amountDeposited) {
-                console.error("Insufficient funds to buy.");
-                return;
-            }
-        })["catch"](function (error) {
-            console.error("Error fetching data:", error);
-            setPortfolioData(null);
-        });
-    }, [price, quantity]);
+    // useEffect(() => {
+    //   api
+    //     .getUserTradeById(username)
+    //     .then((data) => {
+    //       setPortfolioData(data);
+    //       const totalAmount = (price * quantity) + (data.price * data.quantity);
+    //       // Check if the total amount exceeds the amount deposited
+    //       if (totalAmount > data.amountDeposited) {
+    //         console.error("Insufficient funds to buy.");
+    //         return;
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error fetching data:", error);
+    //       setPortfolioData(null);
+    //     });
+    // }, [price, quantity]);
     var formattedDate = new Date().toLocaleDateString("en-US");
     var totalAmountPrice = price * quantity;
-    var handleBuyClick = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var updatedTrade, updatedData, error_1;
+    var handleSellClick = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var existingPortfolioStatus, existingPortfolioData, updatedTrades, response, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    updatedTrade = {
-                        trades: [
-                            {
-                                stockSymbol: ticker,
-                                transactionType: "Sell",
-                                quantity: quantity,
-                                date: new Date(formattedDate),
-                                price: price,
-                                amountInvested: quantity * price
-                            }
-                        ]
-                    };
-                    // const updatedTradesArray = [...userTradesData.trades, updatedTrade];
-                    console.log(updatedTrade);
-                    console.log(id);
-                    return [4 /*yield*/, api_1["default"].updateUserTradeById(id, updatedTrade)];
+                    _a.trys.push([0, 6, , 7]);
+                    return [4 /*yield*/, api_1["default"].getUserTradeStatusById(username)];
                 case 1:
-                    updatedData = _a.sent();
-                    console.log("Updated data:", updatedData);
-                    onClose();
-                    return [3 /*break*/, 3];
+                    existingPortfolioStatus = _a.sent();
+                    console.log(existingPortfolioStatus, "existingPortfolioStatus");
+                    if (!(existingPortfolioStatus === true)) return [3 /*break*/, 4];
+                    return [4 /*yield*/, api_1["default"].getUserTradeById(username)];
                 case 2:
+                    existingPortfolioData = _a.sent();
+                    updatedTrades = existingPortfolioData.trades.map(function (trade) {
+                        if (trade.stockSymbol === ticker) {
+                            // If the stockSymbol matches, update the trade
+                            return __assign(__assign({}, trade), { quantity: trade.quantity - quantity, amountInvested: trade.amountInvested - (quantity * price) });
+                        }
+                        else {
+                            // Otherwise, keep the trade unchanged
+                            return trade;
+                        }
+                    });
+                    return [4 /*yield*/, api_1["default"].updateUserTradeById(username, updatedTrades)];
+                case 3:
+                    response = _a.sent();
+                    console.log("Response from PATCH request:", response);
+                    return [3 /*break*/, 5];
+                case 4:
+                    // Portfolio doesn't exist, create new
+                    console.log("Cannot process");
+                    _a.label = 5;
+                case 5:
+                    onClose();
+                    return [3 /*break*/, 7];
+                case 6:
                     error_1 = _a.sent();
                     console.error("Error updating user trades:", error_1);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     }); };
@@ -114,6 +135,6 @@ var SellPopup = function (_a) {
                 totalAmountPrice),
             react_1["default"].createElement("div", { className: "mt-4 flex justify-end" },
                 react_1["default"].createElement("button", { className: "mr-2 px-4 py-2 bg-gray-300 rounded-lg", onClick: onClose }, "Cancel"),
-                react_1["default"].createElement("button", { className: "px-4 py-2 bg-black text-white rounded-lg", onClick: handleBuyClick }, "Sell")))));
+                react_1["default"].createElement("button", { className: "px-4 py-2 bg-black text-white rounded-lg", onClick: handleSellClick }, "Sell")))));
 };
 exports["default"] = SellPopup;
