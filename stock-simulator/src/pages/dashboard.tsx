@@ -120,7 +120,7 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
   return (
     <>
       {userTradesData !== null ? (
-        <div>
+        <div className="overflow-hidden">
           <div className="bg-black py-2 flex justify-between items-center">
             <h2 className="ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide font-cambria">
               Dashboard
@@ -132,7 +132,7 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
               className="mr-4"
             />
           </div>
-          <div className="m-4 p-4">
+          <div className="mt-2 pt-2">
             <div className="flex justify-between items-center mb-4">
               <div className="text-left ml-6">
                 <p className="text-md mb-2 font-semibold">
@@ -180,10 +180,9 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
                 {/* Replace with actual current amount variable */}
               </div>
             </div>
-            <div className="flex flex-col md:flex-row">
-              <div className="flex-grow">
+            <div className="flex flex-col md:flex-row justify-between">
                 <div className="overflow-auto">
-                  <div className="shadow-lg m-4 p-4 border rounded-lg bg-white h-[400px]">
+                  <div className="shadow-lg m-4 p-4 border rounded-lg bg-white h-[400px] w-[810px]">
                     <h3 className="text-2xl font-bold mb-4 ml-2 font-cambria">
                       Stocks Portfolio
                     </h3>
@@ -298,14 +297,12 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
                       </tbody>
                     </table>
                   </div>
-                </div>
               </div>
-              <div className="flex flex-col md:flex-row">
-                <div className="shadow-lg m-4 p-4 border rounded-lg bg-white flex-grow">
+                <div className="shadow-lg my-4 p-4 border rounded-lg bg-white flex-grow">
                   <h3 className="text-2xl font-bold ml-2 font-cambria">
                     Pie Chart Portfolio
                   </h3>
-                  <PieChart width={400} height={330}>
+                  <PieChart width={380} height={330}>
                     <Pie
                       data={pieData}
                       cx={200}
@@ -329,7 +326,6 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
                     <Legend />
                   </PieChart>
                 </div>
-              </div>
             </div>
             <div className="flex flex-col md:flex-row justify-between">
               <div className="shadow-3d m-4 p-4 border rounded-lg bg-white flex-grow">

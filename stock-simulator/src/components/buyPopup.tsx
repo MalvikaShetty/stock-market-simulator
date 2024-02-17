@@ -26,7 +26,6 @@ const BuyPopup: React.FC<PopupProps> = ({ ticker, price, onClose, username }) =>
 // Inside handleBuyClick function
 const handleBuyClick = async () => {
   try {
-
       const existingPortfolioStatus = await api.getUserTradeStatusById(username);
       console.log(existingPortfolioStatus, "existingPortfolioStatus")
 
@@ -34,35 +33,48 @@ const handleBuyClick = async () => {
         // Portfolio exists, update trades
         const existingPortfolioData = await api.getUserTradeById(username);
         let updatedTrades;
-        if (existingPortfolioData.trades) {
-            updatedTrades = existingPortfolioData.trades.map((trade : any) => {
-                if (trade.stockSymbol === ticker) {
-                    // If the stockSymbol matches, update the trade
-                    return {
-                        ...trade,
-                        date: new Date(formattedDate).toISOString(),
-                        quantity: trade.quantity + quantity,
-                        price: (trade.amountInvested + quantity * price) / (trade.quantity + quantity),
-                        amountInvested: trade.amountInvested + (quantity * price),
-                    };
-                } else {
-                    // Otherwise, keep the trade unchanged
-                    return trade;
-                }
-            });
-        } else {
-            // If existingPortfolioData.trades is null, initialize updatedTrades with an empty array
-            updatedTrades = [
-                {
-                    stockSymbol: ticker,
-                    transactionType: "Buy",
-                    quantity: quantity,
-                    date: new Date(formattedDate).toISOString(), // Convert date to ISO string
-                    price: price,
-                    amountInvested: quantity * price,
-                    status: true
-                }
-            ];
+        if(existingPortfolioData.trades.length === 0){
+          console.log(ticker, "ticke")
+          updatedTrades = [
+            ...existingPortfolioData.trades,
+            {
+                stockSymbol: ticker,
+                transactionType: "Buy",
+                quantity: quantity,
+                date: new Date(formattedDate).toISOString(), // Convert date to ISO string
+                price: price,
+                amountInvested: quantity * price,
+                status: true
+            }
+          ];
+        }else{
+          updatedTrades = existingPortfolioData.trades.map((trade : any) => {
+            if (trade.stockSymbol === ticker) {
+              console.log(ticker, "tick")
+                // If the stockSymbol matches, update the trade
+                return {
+                    ...trade,
+                    date: new Date(formattedDate).toISOString(),
+                    quantity: trade.quantity + quantity,
+                    price: (trade.amountInvested + quantity * price) / (trade.quantity + quantity),
+                    amountInvested: trade.amountInvested + (quantity * price),
+                };
+            } else {
+              console.log(ticker, "tickerrrr")
+                updatedTrades = [
+                  ...existingPortfolioData.trades,
+                  {
+                      stockSymbol: ticker,
+                      transactionType: "Buy",
+                      quantity: quantity,
+                      date: new Date(formattedDate).toISOString(), // Convert date to ISO string
+                      price: price,
+                      amountInvested: quantity * price,
+                      status: true
+                  }
+              ];
+            }
+        });
         }
         const response = await api.updateUserTradeById(username, updatedTrades);
         console.log("Response from PATCH request:", response);

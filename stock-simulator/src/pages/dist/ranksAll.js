@@ -40,14 +40,21 @@ var UserRankingPage = function () {
     // Function to get current price for a stock symbol
     var getCurrentPrice = function (symbol) {
         var stock = stockData.find(function (dataPoint) { return dataPoint.T === symbol; });
-        return stock ? stock.o : "N/A";
+        return stock ? stock.c : "N/A";
     };
     // Function to calculate the total unrealized gain/loss for a user
     var calculateTotalUnrealizedGainLoss = function (trades) {
         return trades.reduce(function (total, trade) {
-            return (total +
-                (trade.quantity * getCurrentPrice(trade.stockSymbol) -
-                    trade.amountInvested));
+            // Check if trade is not null and has all required properties
+            if (trade && trade.quantity != null && trade.stockSymbol) {
+                return (total +
+                    (trade.quantity * getCurrentPrice(trade.stockSymbol) -
+                        trade.amountInvested));
+            }
+            else {
+                // If trade is null or missing required properties, return total unchanged
+                return total;
+            }
         }, 0);
     };
     // Function to rank users based on their total unrealized gain/loss

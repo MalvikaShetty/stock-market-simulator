@@ -4,6 +4,8 @@ var react_1 = require("react");
 var buyPopup_1 = require("../components/buyPopup");
 var api_1 = require("../services/api");
 var sellPopup_1 = require("../components/sellPopup");
+var react_fontawesome_1 = require("@fortawesome/react-fontawesome");
+var free_solid_svg_icons_1 = require("@fortawesome/free-solid-svg-icons");
 var StocksList = function (_a) {
     var username = _a.username;
     var _b = react_1.useState([]), stockData = _b[0], setStockData = _b[1];
@@ -60,35 +62,38 @@ var StocksList = function (_a) {
         });
         setFilteredStockData(filteredData);
     };
-    return (react_1["default"].createElement("div", null, stockData.length === 0 ? (react_1["default"].createElement("p", { className: "text-center m-10 text-[40px]" }, "Loading Stocks List...")) : (react_1["default"].createElement(react_1["default"].Fragment, null,
-        react_1["default"].createElement("h1", { className: "text-2xl font-semibold mb-4 text-center" }, "Stocks List"),
-        showBuyPopup && (react_1["default"].createElement(buyPopup_1["default"], { ticker: selectedTicker, price: selectedPrice, onClose: closePopup, username: username })),
-        showSellPopup && (react_1["default"].createElement(sellPopup_1["default"], { ticker: selectedTicker, price: selectedPrice, onClose: closePopup, username: username })),
-        react_1["default"].createElement("input", { type: "text", placeholder: "Search by Ticker", value: searchTerm, onChange: function (e) { return handleSearch(e.target.value); }, className: "border-2 rounded-lg p-2 mb-4 ml-[36%] w-[400px]" }),
-        react_1["default"].createElement("ul", { className: "flex flex-wrap" }, filteredStockData.map(function (dataPoint, index) { return (react_1["default"].createElement("li", { key: index, className: "ml-16 mb-8 p-10 border-2 rounded-lg w-[300px] text-center" },
-            react_1["default"].createElement("p", { className: "text-lg font-semibold mb-2" },
-                "Ticker: ",
-                dataPoint.T),
-            react_1["default"].createElement("p", null,
-                "Date: ",
-                new Date(dataPoint.t).toLocaleDateString()),
-            react_1["default"].createElement("p", null,
-                "Open: ",
-                dataPoint.o),
-            react_1["default"].createElement("p", null,
-                "High: ",
-                dataPoint.h),
-            react_1["default"].createElement("p", null,
-                "Low: ",
-                dataPoint.l),
-            react_1["default"].createElement("p", null,
-                "Close: ",
-                dataPoint.c),
-            react_1["default"].createElement("p", null,
-                "Volume: ",
-                dataPoint.v),
-            react_1["default"].createElement("div", { className: "flex justify-around mt-4" },
-                react_1["default"].createElement("button", { onClick: function () { return buyStock(dataPoint.T, dataPoint.t); }, className: "border-1 bg-green-600 text-white px-4 py-2 rounded-lg" }, "Buy"),
-                react_1["default"].createElement("button", { onClick: function () { return sellStock(dataPoint.T, dataPoint.t); }, className: "border-1 bg-red-600 text-white px-4 py-2 rounded-lg" }, "Sell")))); }))))));
+    return (react_1["default"].createElement("div", null,
+        react_1["default"].createElement("div", { className: "bg-black py-2 flex justify-between items-center" },
+            react_1["default"].createElement("h2", { className: "ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide font-cambria" }, "Stocks List"),
+            react_1["default"].createElement(react_fontawesome_1.FontAwesomeIcon, { icon: free_solid_svg_icons_1.faUser, color: "white", size: "1x", className: "mr-4" })),
+        react_1["default"].createElement("div", { className: "p-4" }, stockData.length === 0 ? (react_1["default"].createElement("p", { className: "text-center mt-10 text-lg" }, "Loading Stocks List...")) : (react_1["default"].createElement(react_1["default"].Fragment, null,
+            showBuyPopup && (react_1["default"].createElement(buyPopup_1["default"], { ticker: selectedTicker, price: selectedPrice, onClose: closePopup, username: username })),
+            showSellPopup && (react_1["default"].createElement(sellPopup_1["default"], { ticker: selectedTicker, price: selectedPrice, onClose: closePopup, username: username })),
+            react_1["default"].createElement("input", { type: "text", placeholder: "Search by Ticker", value: searchTerm, onChange: function (e) { return handleSearch(e.target.value); }, className: "border-2 rounded-lg p-2 mb-8 mt-4 w-full md:w-[400px] mx-auto block" }),
+            react_1["default"].createElement("ul", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 justify-center" }, filteredStockData.map(function (dataPoint, index) { return (react_1["default"].createElement("li", { key: index, className: "p-6 border rounded-lg shadow-md" },
+                react_1["default"].createElement("p", { className: "text-lg font-semibold mb-2" },
+                    "Ticker: ",
+                    dataPoint.T),
+                react_1["default"].createElement("p", null,
+                    "Date: ",
+                    new Date(dataPoint.t).toLocaleDateString()),
+                react_1["default"].createElement("p", null,
+                    "Open: ",
+                    dataPoint.o),
+                react_1["default"].createElement("p", null,
+                    "High: ",
+                    dataPoint.h),
+                react_1["default"].createElement("p", null,
+                    "Low: ",
+                    dataPoint.l),
+                react_1["default"].createElement("p", null,
+                    "Close: ",
+                    dataPoint.c),
+                react_1["default"].createElement("p", null,
+                    "Volume: ",
+                    dataPoint.v),
+                react_1["default"].createElement("div", { className: "flex justify-around mt-4" },
+                    react_1["default"].createElement("button", { onClick: function () { return buyStock(dataPoint.T, dataPoint.t); }, className: "border-1 bg-green-600 text-white px-4 py-2 rounded-lg" }, "Buy"),
+                    react_1["default"].createElement("button", { onClick: function () { return sellStock(dataPoint.T, dataPoint.t); }, className: "border-1 bg-red-600 text-white px-4 py-2 rounded-lg" }, "Sell")))); })))))));
 };
 exports["default"] = StocksList;

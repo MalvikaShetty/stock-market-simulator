@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import BuyPopup from "../components/buyPopup";
 import api from "../services/api";
 import SellPopup from "../components/sellPopup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 interface DashboardProps {
-  username : string;
+  username: string;
 }
 
 const StocksList: React.FC<DashboardProps> = ({ username }) => {
@@ -73,63 +75,77 @@ const StocksList: React.FC<DashboardProps> = ({ username }) => {
 
   return (
     <div>
-      {stockData.length === 0 ? (
-        <p className="text-center m-10 text-[40px]">Loading Stocks List...</p>
-      ) : (
-        <>
-          <h1 className="text-2xl font-semibold mb-4 text-center">Stocks List</h1>
-          {showBuyPopup && (
-            <BuyPopup
-              ticker={selectedTicker}
-              price={selectedPrice}
-              onClose={closePopup}
-              username={username}
+      <div className="bg-black py-2 flex justify-between items-center">
+        <h2 className="ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide font-cambria">
+          Stocks List
+        </h2>
+        <FontAwesomeIcon
+          icon={faUser}
+          color="white"
+          size="1x"
+          className="mr-4"
+        />
+      </div>
+      <div className="p-4">
+        {stockData.length === 0 ? (
+          <p className="text-center mt-10 text-lg">Loading Stocks List...</p>
+        ) : (
+          <>
+            {showBuyPopup && (
+              <BuyPopup
+                ticker={selectedTicker}
+                price={selectedPrice}
+                onClose={closePopup}
+                username={username}
+              />
+            )}
+            {showSellPopup && (
+              <SellPopup
+                ticker={selectedTicker}
+                price={selectedPrice}
+                onClose={closePopup}
+                username={username}
+              />
+            )}
+            <input
+              type="text"
+              placeholder="Search by Ticker"
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="border-2 rounded-lg p-2 mb-8 mt-4 w-full md:w-[400px] mx-auto block"
             />
-          )}
-           {showSellPopup && (
-            <SellPopup
-              ticker={selectedTicker}
-              price={selectedPrice}
-              onClose={closePopup}
-              username={username}
-            />
-          )}
-          <input
-            type="text"
-            placeholder="Search by Ticker"
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="border-2 rounded-lg p-2 mb-4 ml-[36%] w-[400px]"
-          />
-          <ul className="flex flex-wrap">
-            {filteredStockData.map((dataPoint, index) => (
-              <li key={index} className="ml-16 mb-8 p-10 border-2 rounded-lg w-[300px] text-center">
-                <p className="text-lg font-semibold mb-2">Ticker: {dataPoint.T}</p>
-                <p>Date: {new Date(dataPoint.t).toLocaleDateString()}</p>
-                <p>Open: {dataPoint.o}</p>
-                <p>High: {dataPoint.h}</p>
-                <p>Low: {dataPoint.l}</p>
-                <p>Close: {dataPoint.c}</p>
-                <p>Volume: {dataPoint.v}</p>
-                <div className="flex justify-around mt-4">
-                  <button
-                    onClick={() => buyStock(dataPoint.T, dataPoint.t)}
-                    className="border-1 bg-green-600 text-white px-4 py-2 rounded-lg"
-                  >
-                    Buy
-                  </button>
-                  <button
-                    onClick={() => sellStock(dataPoint.T, dataPoint.t)}
-                    className="border-1 bg-red-600 text-white px-4 py-2 rounded-lg"
-                  >
-                    Sell
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 justify-center">
+              {filteredStockData.map((dataPoint, index) => (
+                <li key={index} className="p-6 border rounded-lg shadow-md">
+                  <p className="text-lg font-semibold mb-2">
+                    Ticker: {dataPoint.T}
+                  </p>
+                  <p>Date: {new Date(dataPoint.t).toLocaleDateString()}</p>
+                  <p>Open: {dataPoint.o}</p>
+                  <p>High: {dataPoint.h}</p>
+                  <p>Low: {dataPoint.l}</p>
+                  <p>Close: {dataPoint.c}</p>
+                  <p>Volume: {dataPoint.v}</p>
+                  <div className="flex justify-around mt-4">
+                    <button
+                      onClick={() => buyStock(dataPoint.T, dataPoint.t)}
+                      className="border-1 bg-green-600 text-white px-4 py-2 rounded-lg"
+                    >
+                      Buy
+                    </button>
+                    <button
+                      onClick={() => sellStock(dataPoint.T, dataPoint.t)}
+                      className="border-1 bg-red-600 text-white px-4 py-2 rounded-lg"
+                    >
+                      Sell
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     </div>
   );
 };

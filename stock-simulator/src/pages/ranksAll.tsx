@@ -40,19 +40,25 @@ const UserRankingPage: React.FC = () => {
   // Function to get current price for a stock symbol
   const getCurrentPrice = (symbol: any) => {
     const stock = stockData.find((dataPoint) => dataPoint.T === symbol);
-    return stock ? stock.o : "N/A";
+    return stock ? stock.c : "N/A";
   };
 
   // Function to calculate the total unrealized gain/loss for a user
   const calculateTotalUnrealizedGainLoss = (trades: any[]) => {
     return trades.reduce((total, trade) => {
-      return (
-        total +
-        (trade.quantity * getCurrentPrice(trade.stockSymbol) -
-          trade.amountInvested)
-      );
+      // Check if trade is not null and has all required properties
+      if (trade && trade.quantity != null && trade.stockSymbol) {
+        return (
+          total +
+          (trade.quantity * getCurrentPrice(trade.stockSymbol) -
+            trade.amountInvested)
+        );
+      } else {
+        // If trade is null or missing required properties, return total unchanged
+        return total;
+      }
     }, 0);
-  };
+  };  
 
   // Function to rank users based on their total unrealized gain/loss
   const rankUsers = () => {
