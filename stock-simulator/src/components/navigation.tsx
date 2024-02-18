@@ -42,8 +42,8 @@ const Navigation: React.FC<NavigationProps> = ({
   return (
       <> 
       {isLoggedIn ? (
-          <div className="bg-gray-100 text-gray-900 w-64 space-y-12 py-7 px-2 fixed inset-y-0 left-0 transform -translate-x-full sm:relative sm:translate-x-0 transition duration-200 ease-in-out min-h-screen">
-          <div className="text-gray-900 flex items-center space-x-2 px-4">
+         <div className="bg-gray-100 text-gray-900 space-y-12 py-7 px-2 fixed inset-y-0 left-0 transform -translate-x-full sm:relative sm:translate-x-0 transition duration-200 ease-in-out min-h-screen w-64">
+         <div className="text-gray-900 flex items-center space-x-2 px-6">
                 <span className="text-2xl font-bold">Your Brand</span>
               </div>
           <nav>

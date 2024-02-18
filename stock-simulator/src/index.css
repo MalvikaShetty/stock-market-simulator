@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global CSS (if not using JIT mode) */
+body {
+  overflow-x: hidden;
+}
+
 
 /* Add this custom style in your global CSS file */
 .shadow-3d {
@@ -14,8 +19,14 @@
   }
   
   .container {
-    @apply flex justify-center items-center h-screen bg-cover;
+    @apply flex justify-center items-center h-screen bg-cover max-w-none;
     background-image: url('./assets/bg-image-stocks.jpg');
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      height: auto; /* Adjust the height dynamically based on screen size */
+    }
   }
   
   .navigation-box {

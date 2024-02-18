@@ -36,11 +36,18 @@ const UserRankingPage: React.FC = () => {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  // Function to get current price for a stock symbol
-  const getCurrentPrice = (symbol: any) => {
+    // Function to get current price for a stock symbol
+const getCurrentPrice = (symbol: any) => {
+    // Check if stockData is empty or undefined
+    if (!stockData || stockData.length === 0) {
+      return "N/A";
+    }
+  
+    // Find the stock with the matching symbol
     const stock = stockData.find((dataPoint) => dataPoint.T === symbol);
-    return stock ? stock.c : "N/A";
+    return stock ? stock.o : "N/A";
   };
+  
 
   // Function to calculate the total unrealized gain/loss for a user
   const calculateTotalUnrealizedGainLoss = (trades: any[]) => {
@@ -87,8 +94,8 @@ const UserRankingPage: React.FC = () => {
   const rankedUsers = rankUsers();
 
   return (
-    <div className="container">
-        <div className="bg-black py-2 flex justify-between items-center w-full">
+    <div className="">
+        <div className="bg-black py-2 flex justify-between items-center w-[1300px]">
           <h2 className="ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide font-cambria">
             Ranks of All Users
           </h2>

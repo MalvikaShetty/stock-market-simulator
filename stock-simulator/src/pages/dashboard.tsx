@@ -58,8 +58,14 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
 
   // Function to get current price for a stock symbol
   const getCurrentPrice = (symbol: any) => {
+    // Check if stockData is empty or undefined
+    if (!stockData || stockData.length === 0) {
+      return "N/A";
+    }
+
+    // Find the stock with the matching symbol
     const stock = stockData.find((dataPoint) => dataPoint.T === symbol);
-    return stock ? stock.c : "N/A";
+    return stock ? stock.o : "N/A";
   };
 
   // Function to get total unrealized gain/loss of the logged user
@@ -114,36 +120,41 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
     { name: "Consumer", investment: 7000, return: 7300 },
     // More sectors or specific stocks...
   ];
-  
 
   const lineData = [
-    { month: "January", Tech: 4000, Finance: 3000, Energy: 2000, Consumer: 2500 },
-    { month: "February", Tech: 4500, Finance: 3200, Energy: 2100, Consumer: 2600 },
+    {
+      month: "January",
+      Tech: 4000,
+      Finance: 3000,
+      Energy: 2000,
+      Consumer: 2500,
+    },
+    {
+      month: "February",
+      Tech: 4500,
+      Finance: 3200,
+      Energy: 2100,
+      Consumer: 2600,
+    },
     { month: "March", Tech: 4700, Finance: 3300, Energy: 2150, Consumer: 2700 },
     { month: "April", Tech: 4800, Finance: 3400, Energy: 2200, Consumer: 2800 },
     // More data points...
   ];
-  
 
   let totalInvestedAmount = 0;
   return (
     <div>
-      <div className="bg-black py-2 flex justify-between items-center w-[1400px]">
-        <h2 className="ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide font-cambria">
-          Dashboard
-        </h2>
-        <FontAwesomeIcon
-          icon={faUser}
-          color="white"
-          size="1x"
-          className="mr-4"
-        />
-      </div>
+      <div className="bg-black py-2 flex justify-between items-center">
+  <h2 className="ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide">
+    Dashboard
+  </h2>
+  <FontAwesomeIcon icon={faUser} color="white" size="1x" className="mr-4" />
+</div>
       {userTradesData !== null ? (
-        <div className="overflow-hidden">
+        <div className="overflow-hidden p-4">
           <div className="mt-2 pt-2">
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-left ml-6">
+            <div className="flex flex-col md:flex-row justify-between items-start">
+              <div className="text-left ml-4">
                 <p className="text-md mb-2 font-semibold">
                   Amount Invested Total: $
                   {(userTradesData && userTradesData.trades
@@ -161,12 +172,6 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
                     : 0
                   ).toFixed(2)}
                 </p>
-                {/* <p className="text-md mb-2">
-            Amount Can be Withdrawn: $
-          </p> */}
-                <p className="text-md mb-2 font-semibold">
-                  {/* Current Value: "To be added" */}
-                </p>
                 <p className="text-md mb-2 font-semibold">
                   Total Unrealized Gain/Loss:{" "}
                   <span
@@ -178,36 +183,33 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
                   </span>
                 </p>
               </div>
-              <div className="text-right mr-6">
+              <div className="text-right mr-2">
                 <p className="text-md mb-2 font-semibold">
                   Initial Amount:{" "}
                   <span className="font-bold">${InitialAmount}</span>
-                </p>{" "}
-                {/* Replace with actual initial amount variable */}
+                </p>
                 <p className="text-md font-semibold">
                   Current Amount:{" "}
                   <span className="font-bold">
                     {InitialAmount - totalInvestedAmount < 0 ? (
-                      <p className="text-red-500 font-bold">
+                      <span className="text-red-500 font-bold">
                         Trading not possible. Insufficient funds.
-                      </p>
+                      </span>
                     ) : (
                       <span className="font-bold">
                         ${(InitialAmount - totalInvestedAmount).toFixed(2)}
                       </span>
                     )}
                   </span>
-                </p>{" "}
-                {/* Replace with actual current amount variable */}
+                </p>
               </div>
             </div>
-            <div className="flex flex-col md:flex-row justify-between">
-              <div className="shadow-lg m-4 p-4 border rounded-lg bg-white h-[400px] w-[850px]">
-                <h3 className="text-2xl font-bold mb-4 ml-2 font-cambria">
-                  Stocks Portfolio
-                </h3>
-
+            <div className="flex flex-col md:flex-row justify-between gap-4">
+              {/* Adjust the width and height dynamically */}
+              <div className="shadow-lg m-4 p-2 border rounded-lg bg-white flex-auto">
+                <h3 className="text-2xl font-bold mb-4">Stocks Portfolio</h3>
                 <div className="overflow-y-auto" style={{ maxHeight: "300px" }}>
+                  {/* Table goes here */}
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50 sticky top-0">
                       <tr>
@@ -320,11 +322,8 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
                   </table>
                 </div>
               </div>
-
-              <div className="shadow-lg my-4 p-4 border rounded-lg bg-white flex-grow">
-                <h3 className="text-2xl font-bold ml-2 font-cambria">
-                  Pie Chart Portfolio
-                </h3>
+              <div className="shadow-lg my-4 p-2 border rounded-lg bg-white flex-auto">
+                <h3 className="text-2xl font-bold">Pie Chart Portfolio</h3>
                 <PieChart width={380} height={330}>
                   <Pie
                     data={pieData}
@@ -350,47 +349,42 @@ const Dashboard: React.FC<DashboardProps> = ({ username }) => {
                 </PieChart>
               </div>
             </div>
-            <div className="flex flex-col md:flex-row justify-between">
-              <div className="shadow-3d m-4 p-4 border rounded-lg bg-white flex-grow">
-                <h3 className="text-2xl font-bold mb-4 ml-2 font-cambria">
-                  Bar Chart
-                </h3>
+            <div className="flex flex-col md:flex-row justify-between gap-4">
+              <div className="shadow-3d m-4 p-4 border rounded-lg bg-white flex-auto">
+                <h3 className="text-2xl font-bold mb-4">Bar Chart</h3>
+                {/* BarChart goes here */}
                 <BarChart width={400} height={300} data={barData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ReTooltip />
-                <ReLegend />
-                <Bar dataKey="investment" fill="#8884d8" />
-                <Bar dataKey="return" fill="#82ca9d" />
-              </BarChart>
-
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <ReTooltip />
+                  <ReLegend />
+                  <Bar dataKey="investment" fill="#8884d8" />
+                  <Bar dataKey="return" fill="#82ca9d" />
+                </BarChart>
               </div>
-              <div className="shadow-3d m-4 p-4 border rounded-lg bg-white flex-grow">
-                <h3 className="text-2xl font-bold ml-2 font-cambria mb-4">
-                  Line Chart Portfolio
-                </h3>
+              <div className="shadow-3d m-4 p-4 border rounded-lg bg-white flex-auto">
+                <h3 className="text-2xl font-bold">Line Chart Portfolio</h3>
+                {/* LineChart goes here */}
                 <LineChart width={400} height={300} data={lineData}>
-                <XAxis dataKey="month" />
-                <YAxis />
-                <ReTooltip />
-                <ReLegend />
-                <Line type="monotone" dataKey="Tech" stroke="#8884d8" />
-                <Line type="monotone" dataKey="Finance" stroke="#82ca9d" />
-                <Line type="monotone" dataKey="Energy" stroke="#ca82a4" />
-                <Line type="monotone" dataKey="Consumer" stroke="#ccc349" />
-              </LineChart>
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <ReTooltip />
+                  <ReLegend />
+                  <Line type="monotone" dataKey="Tech" stroke="#8884d8" />
+                  <Line type="monotone" dataKey="Finance" stroke="#82ca9d" />
+                  <Line type="monotone" dataKey="Energy" stroke="#ca82a4" />
+                  <Line type="monotone" dataKey="Consumer" stroke="#ccc349" />
+                </LineChart>
               </div>
             </div>
           </div>
         </div>
       ) : (
-        <>
-          <h2 className="ml-[40%] font-bold text-[40px] font-cambria">
-            No Data Yet
-          </h2>
-          <p className="ml-[43%] font-cambria">Buy some stocks</p>
-        </>
+        <div className="text-center">
+          <h2 className="font-bold text-[40px]">No Data Yet</h2>
+          <p>Buy some stocks</p>
+        </div>
       )}
     </div>
   );

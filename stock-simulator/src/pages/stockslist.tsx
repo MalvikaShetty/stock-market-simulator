@@ -19,6 +19,7 @@ const StocksList: React.FC<DashboardProps> = ({ username }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredStockData, setFilteredStockData] = useState<Array<any>>([]);
 
+
   useEffect(() => {
     api
       .getStocks()
@@ -70,7 +71,12 @@ const StocksList: React.FC<DashboardProps> = ({ username }) => {
 
   return (
     <div>
-      <div className="bg-black py-2 flex justify-between items-center">
+      <div className="">
+        {stockData.length === 0 ? (
+          <p className="text-center mt-10 text-lg p-4">Loading Stocks List...</p>
+        ) : (
+          <>
+          <div className="bg-black py-2 flex justify-between items-center w-[1300px]">
         <h2 className="ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide font-cambria">
           Stocks List
         </h2>
@@ -82,10 +88,6 @@ const StocksList: React.FC<DashboardProps> = ({ username }) => {
         />
       </div>
       <div className="p-4">
-        {stockData.length === 0 ? (
-          <p className="text-center mt-10 text-lg">Loading Stocks List...</p>
-        ) : (
-          <>
             {showBuyPopup && (
               <BuyPopup
                 ticker={selectedTicker}
@@ -110,35 +112,40 @@ const StocksList: React.FC<DashboardProps> = ({ username }) => {
               onChange={(e) => handleSearch(e.target.value)}
               className="border-2 rounded-lg p-2 mb-8 mt-4 w-full md:w-[400px] mx-auto block"
             />
-            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 justify-center">
-              {filteredStockData.map((dataPoint, index) => (
-                <li key={index} className="p-6 border rounded-lg shadow-md">
-                  <p className="text-lg font-semibold mb-2">
-                    Ticker: {dataPoint.T}
-                  </p>
-                  <p>Date: {new Date(dataPoint.t).toLocaleDateString()}</p>
-                  <p>Open: {dataPoint.o}</p>
-                  <p>High: {dataPoint.h}</p>
-                  <p>Low: {dataPoint.l}</p>
-                  <p>Close: {dataPoint.c}</p>
-                  <p>Volume: {dataPoint.v}</p>
-                  <div className="flex justify-around mt-4">
-                    <button
-                      onClick={() => buyStock(dataPoint.T, dataPoint.t)}
-                      className="border-1 bg-green-600 text-white px-4 py-2 rounded-lg"
-                    >
-                      Buy
-                    </button>
-                    <button
-                      onClick={() => sellStock(dataPoint.T, dataPoint.t)}
-                      className="border-1 bg-red-600 text-white px-4 py-2 rounded-lg"
-                    >
-                      Sell
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {filteredStockData !== undefined && filteredStockData.length > 0 ? (
+              <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 justify-center">
+                {filteredStockData.map((dataPoint, index) => (
+                  <li key={index} className="p-6 border rounded-lg shadow-md">
+                    <p className="text-lg font-semibold mb-2">
+                      Ticker: {dataPoint.T}
+                    </p>
+                    <p>Date: {new Date(dataPoint.t).toLocaleDateString()}</p>
+                    <p>Open: {dataPoint.o}</p>
+                    <p>High: {dataPoint.h}</p>
+                    <p>Low: {dataPoint.l}</p>
+                    <p>Close: {dataPoint.c}</p>
+                    <p>Volume: {dataPoint.v}</p>
+                    <div className="flex justify-around mt-4">
+                      <button
+                        onClick={() => buyStock(dataPoint.T, dataPoint.t)}
+                        className="border-1 bg-green-600 text-white px-4 py-2 rounded-lg"
+                      >
+                        Buy
+                      </button>
+                      <button
+                        onClick={() => sellStock(dataPoint.T, dataPoint.t)}
+                        className="border-1 bg-red-600 text-white px-4 py-2 rounded-lg"
+                      >
+                        Sell
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-center mt-10 text-lg">No matching stocks found.</p>
+            )}
+            </div>
           </>
         )}
       </div>

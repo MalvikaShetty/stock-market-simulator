@@ -19,8 +19,8 @@ var Navigation = function (_a) {
             onLogout();
         }
     };
-    return (react_1["default"].createElement(react_1["default"].Fragment, null, isLoggedIn ? (react_1["default"].createElement("div", { className: "bg-gray-100 text-gray-900 w-64 space-y-12 py-7 px-2 fixed inset-y-0 left-0 transform -translate-x-full sm:relative sm:translate-x-0 transition duration-200 ease-in-out min-h-screen" },
-        react_1["default"].createElement("div", { className: "text-gray-900 flex items-center space-x-2 px-4" },
+    return (react_1["default"].createElement(react_1["default"].Fragment, null, isLoggedIn ? (react_1["default"].createElement("div", { className: "bg-gray-100 text-gray-900 space-y-12 py-7 px-2 fixed inset-y-0 left-0 transform -translate-x-full sm:relative sm:translate-x-0 transition duration-200 ease-in-out min-h-screen w-64" },
+        react_1["default"].createElement("div", { className: "text-gray-900 flex items-center space-x-2 px-6" },
             react_1["default"].createElement("span", { className: "text-2xl font-bold" }, "Your Brand")),
         react_1["default"].createElement("nav", null,
             react_1["default"].createElement("div", { className: "p-4 bg-gray-200 mb-5 rounded-lg" },

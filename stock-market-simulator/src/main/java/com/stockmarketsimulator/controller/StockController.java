@@ -160,7 +160,6 @@ public ResponseEntity<UserTrades> updateUserTrades(@PathVariable String userId, 
         }
     }
 
-
     @DeleteMapping("/trade/{userId}")
     public ResponseEntity<String> deleteUserTradesById(@PathVariable String userId) {
         userTradesService.deleteById(userId);
@@ -168,7 +167,7 @@ public ResponseEntity<UserTrades> updateUserTrades(@PathVariable String userId, 
     }
 
     @GetMapping("/stock")
-    public ResponseEntity<String> fetchData(Model model) {
+    public ResponseEntity<String> fetchData() {
         RestTemplate restTemplate = new RestTemplate();
 
         String apiKey = "1TFBB3MQprW8K7Tsp6T765byKyLokbAZ";
@@ -176,22 +175,16 @@ public ResponseEntity<UserTrades> updateUserTrades(@PathVariable String userId, 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = date.format(formatter);
 
-//        LocalDate twoDaysAgo = LocalDate.now().minusDays(2);
-
-
         String url = "https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/"
-                + formattedDate + "?adjusted=true&apiKey=" + apiKey;
+                + "2024-02-16?adjusted=true&apiKey=" + apiKey;
 
         try {
             String responseBody = restTemplate.getForObject(url, String.class);
-            model.addAttribute("data", responseBody);
             return ResponseEntity.ok(responseBody);
-
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("error", "An error occurred.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
         }
-
-        return null;
     }
+
 }

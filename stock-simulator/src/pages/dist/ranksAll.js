@@ -38,8 +38,13 @@ var UserRankingPage = function () {
     }, []);
     // Function to get current price for a stock symbol
     var getCurrentPrice = function (symbol) {
+        // Check if stockData is empty or undefined
+        if (!stockData || stockData.length === 0) {
+            return "N/A";
+        }
+        // Find the stock with the matching symbol
         var stock = stockData.find(function (dataPoint) { return dataPoint.T === symbol; });
-        return stock ? stock.c : "N/A";
+        return stock ? stock.o : "N/A";
     };
     // Function to calculate the total unrealized gain/loss for a user
     var calculateTotalUnrealizedGainLoss = function (trades) {
@@ -73,8 +78,8 @@ var UserRankingPage = function () {
         return rankedUsers;
     };
     var rankedUsers = rankUsers();
-    return (react_1["default"].createElement("div", { className: "container" },
-        react_1["default"].createElement("div", { className: "bg-black py-2 flex justify-between items-center w-full" },
+    return (react_1["default"].createElement("div", { className: "" },
+        react_1["default"].createElement("div", { className: "bg-black py-2 flex justify-between items-center w-[1300px]" },
             react_1["default"].createElement("h2", { className: "ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide font-cambria" }, "Ranks of All Users"),
             react_1["default"].createElement(react_fontawesome_1.FontAwesomeIcon, { icon: free_solid_svg_icons_1.faUser, color: "white", size: "1x", className: "mr-4" })),
         react_1["default"].createElement("div", { className: "mx-auto p-4" },

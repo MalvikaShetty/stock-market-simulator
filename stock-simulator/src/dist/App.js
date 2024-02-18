@@ -21,11 +21,6 @@ function App() {
     var PAGE_ROUTES = [
         // COMMON PAGES
         {
-            name: "Landing Page",
-            path: "/",
-            component: landingpage_1["default"]
-        },
-        {
             name: "Home",
             path: "/home",
             component: function () { return (react_1["default"].createElement(dashboard_1["default"], { username: username })); }
@@ -57,11 +52,15 @@ function App() {
     // eslint-disable-next-line no-restricted-globals
     // const showNavigation = !['/login', '/signup'].includes(location.pathname);
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
-        react_1["default"].createElement(react_router_dom_1.Routes, null, PAGE_ROUTES.map(function (page) { return (react_1["default"].createElement(react_router_dom_1.Route, { key: "/login", path: "/login", element: react_1["default"].createElement(login_1["default"], { onLogin: function (username) {
-                    setUsername(username); // Update the username state
-                    setIsLoggedIn(true); // Update the login status
-                } }) })); })),
-        react_1["default"].createElement(react_router_dom_1.Routes, null, PAGE_ROUTES.map(function (page) { return (react_1["default"].createElement(react_router_dom_1.Route, { key: "/signup", path: "/signup", element: react_1["default"].createElement(signup_1["default"], null) })); })),
+        react_1["default"].createElement(react_router_dom_1.Routes, null,
+            react_1["default"].createElement(react_router_dom_1.Route, { key: "/login", path: "/login", element: react_1["default"].createElement(login_1["default"], { onLogin: function (username) {
+                        setUsername(username); // Update the username state
+                        setIsLoggedIn(true); // Update the login status
+                    } }) })),
+        react_1["default"].createElement(react_router_dom_1.Routes, null,
+            react_1["default"].createElement(react_router_dom_1.Route, { key: "/signup", path: "/signup", element: react_1["default"].createElement(signup_1["default"], null) })),
+        react_1["default"].createElement(react_router_dom_1.Routes, null,
+            react_1["default"].createElement(react_router_dom_1.Route, { key: "/", path: "/", element: react_1["default"].createElement(landingpage_1["default"], null) })),
         react_1["default"].createElement("div", { className: "flex" },
             react_1["default"].createElement(navigation_1["default"], { isLoggedIn: isLoggedIn, username: username, onLogout: handleLogout }),
             react_1["default"].createElement(react_router_dom_1.Routes, null, PAGE_ROUTES.map(function (page) { return (react_1["default"].createElement(react_router_dom_1.Route, { key: page.path, path: page.path, element: react_1["default"].createElement(page.component, null) })); })))));

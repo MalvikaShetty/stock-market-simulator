@@ -26,11 +26,6 @@ function App() {
   const PAGE_ROUTES = [
     // COMMON PAGES
     {
-      name: "Landing Page",
-      path: "/",
-      component:LandingPage,
-    },
-    {
       name: "Home",
       path: "/home",
       component: () => (<Dashboard username={username} />),
@@ -70,7 +65,6 @@ function App() {
   return (
     <>
        <Routes>
-        {PAGE_ROUTES.map((page) => (
           <Route
             key="/login"
             path="/login"
@@ -83,16 +77,20 @@ function App() {
               />
             }
           />
-        ))}
       </Routes>
       <Routes>
-        {PAGE_ROUTES.map((page) => (
           <Route
             key="/signup"
             path="/signup"
             element= {<SignUpPage/>}
            />
-           ))}
+          </Routes>
+          <Routes>
+          <Route
+            key="/"
+            path="/"
+            element= {<LandingPage/>}
+           />
           </Routes>
       <div className="flex">
       <Navigation isLoggedIn={isLoggedIn} username={username} onLogout={handleLogout} />
