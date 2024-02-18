@@ -40,32 +40,31 @@ const Navigation: React.FC<NavigationProps> = ({
   };
 
   return (
-    <div className="bg-gray-100 text-gray-900 w-64 space-y-12 py-7 px-2 fixed inset-y-0 left-0 transform -translate-x-full sm:relative sm:translate-x-0 transition duration-200 ease-in-out min-h-screen">
-  <div className="text-gray-900 flex items-center space-x-2 px-4">
-        <span className="text-2xl font-bold">Your Brand</span>
-      </div>
-      <nav>
-        {isLoggedIn ? (
-          <>
+      <> 
+      {isLoggedIn ? (
+          <div className="bg-gray-100 text-gray-900 w-64 space-y-12 py-7 px-2 fixed inset-y-0 left-0 transform -translate-x-full sm:relative sm:translate-x-0 transition duration-200 ease-in-out min-h-screen">
+          <div className="text-gray-900 flex items-center space-x-2 px-4">
+                <span className="text-2xl font-bold">Your Brand</span>
+              </div>
+          <nav>
             <div className="p-4 bg-gray-200 mb-5 rounded-lg">
               <p className="text-lg font-semibold">Welcome, {username}!</p>
             </div>
-            <NavigationItem to="/" icon={faHome} label="Dashboard" />
+            <NavigationItem to="/home" icon={faHome} label="Dashboard" />
             <NavigationItem to="/stocks" icon={faList} label="Stocks List" />
             <NavigationItem to="/ranks" icon={faUsers} label="All Users Ranks" />
             <Link to="/login" className="flex items-center px-4 py-2.5 rounded transition duration-200 text-gray-600 hover:bg-gray-200" onClick={onLogout}>
               <FontAwesomeIcon icon={faSignInAlt} className="h-5 w-5 mr-2" />
               Logout
             </Link>
-          </>
+          </nav>
+          </div>
         ) : (
-          <>
-            <NavigationItem to="/login" icon={faSignInAlt} label="Login" />
-            <NavigationItem to="/signup" icon={faUserPlus} label="Sign Up" />
-          </>
+         <></>
         )}
-      </nav>
-    </div>
+      </>
+
+    
   );
 };
 

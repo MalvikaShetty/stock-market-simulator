@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../services/api"; // Import your api module
+import { useNavigate } from "react-router-dom";
 
 interface PopupProps {
   ticker: string;
@@ -15,6 +16,7 @@ const SellPopup: React.FC<PopupProps> = ({
   username,
 }) => {
   const [quantity, setQuantity] = useState<number>(1);
+  const navigate = useNavigate();
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newQuantity = parseInt(event.target.value, 10);
@@ -58,6 +60,7 @@ const SellPopup: React.FC<PopupProps> = ({
       }
 
       onClose();
+      navigate('/home');
     } catch (error) {
       console.error("Error updating user trades:", error);
     }

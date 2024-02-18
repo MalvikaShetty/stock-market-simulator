@@ -11,6 +11,7 @@ import Dashboard from './pages/dashboard';
 import Login from './pages/login';
 import SignUpPage from './pages/signup';
 import UserRankingPage from './pages/ranksAll';
+import LandingPage from './pages/landingpage';
 
 function App() {
    const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -25,8 +26,13 @@ function App() {
   const PAGE_ROUTES = [
     // COMMON PAGES
     {
-      name: "Home",
+      name: "Landing Page",
       path: "/",
+      component:LandingPage,
+    },
+    {
+      name: "Home",
+      path: "/home",
       component: () => (<Dashboard username={username} />),
     },
     {
@@ -79,6 +85,15 @@ function App() {
           />
         ))}
       </Routes>
+      <Routes>
+        {PAGE_ROUTES.map((page) => (
+          <Route
+            key="/signup"
+            path="/signup"
+            element= {<SignUpPage/>}
+           />
+           ))}
+          </Routes>
       <div className="flex">
       <Navigation isLoggedIn={isLoggedIn} username={username} onLogout={handleLogout} />
       <Routes>

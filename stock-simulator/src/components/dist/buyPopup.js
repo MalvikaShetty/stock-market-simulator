@@ -56,9 +56,14 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 exports.__esModule = true;
 var react_1 = require("react");
 var api_1 = require("../services/api");
+var react_router_dom_1 = require("react-router-dom");
 var BuyPopup = function (_a) {
     var ticker = _a.ticker, price = _a.price, onClose = _a.onClose, username = _a.username;
     var _b = react_1.useState(1), quantity = _b[0], setQuantity = _b[1];
+    var _c = react_1.useState(false), checkedForTicker = _c[0], setcheckedForTicker = _c[1];
+    var checkedforticker = false;
+    var foundticker = false;
+    var navigate = react_router_dom_1.useNavigate();
     var handleQuantityChange = function (event) {
         var newQuantity = parseInt(event.target.value, 10);
         setQuantity(newQuantity);
@@ -70,7 +75,7 @@ var BuyPopup = function (_a) {
     var formattedDate = new Date().toLocaleDateString("en-US");
     // Inside handleBuyClick function
     var handleBuyClick = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var existingPortfolioStatus, existingPortfolioData_1, updatedTrades_1, response, data, response, error_1;
+        var existingPortfolioStatus, existingPortfolioData, updatedTrades, updatedTradesCopy, newTrade, response, data, response, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -78,14 +83,13 @@ var BuyPopup = function (_a) {
                     return [4 /*yield*/, api_1["default"].getUserTradeStatusById(username)];
                 case 1:
                     existingPortfolioStatus = _a.sent();
-                    console.log(existingPortfolioStatus, "existingPortfolioStatus");
                     if (!(existingPortfolioStatus === true)) return [3 /*break*/, 4];
                     return [4 /*yield*/, api_1["default"].getUserTradeById(username)];
                 case 2:
-                    existingPortfolioData_1 = _a.sent();
-                    if (existingPortfolioData_1.trades.length === 0) {
-                        console.log(ticker, "ticke");
-                        updatedTrades_1 = __spreadArrays(existingPortfolioData_1.trades, [
+                    existingPortfolioData = _a.sent();
+                    updatedTrades = void 0;
+                    if (existingPortfolioData.trades.length === 0) {
+                        updatedTrades = __spreadArrays(existingPortfolioData.trades, [
                             {
                                 stockSymbol: ticker,
                                 transactionType: "Buy",
@@ -98,29 +102,36 @@ var BuyPopup = function (_a) {
                         ]);
                     }
                     else {
-                        updatedTrades_1 = existingPortfolioData_1.trades.map(function (trade) {
-                            if (trade.stockSymbol === ticker) {
-                                console.log(ticker, "tick");
-                                // If the stockSymbol matches, update the trade
-                                return __assign(__assign({}, trade), { date: new Date(formattedDate).toISOString(), quantity: trade.quantity + quantity, price: (trade.amountInvested + quantity * price) / (trade.quantity + quantity), amountInvested: trade.amountInvested + (quantity * price) });
-                            }
-                            else {
-                                console.log(ticker, "tickerrrr");
-                                updatedTrades_1 = __spreadArrays(existingPortfolioData_1.trades, [
-                                    {
-                                        stockSymbol: ticker,
-                                        transactionType: "Buy",
-                                        quantity: quantity,
-                                        date: new Date(formattedDate).toISOString(),
-                                        price: price,
-                                        amountInvested: quantity * price,
-                                        status: true
-                                    }
-                                ]);
-                            }
-                        });
+                        console.log(checkedforticker, "first check");
+                        if (checkedforticker === false && foundticker === false) {
+                            checkedforticker = true;
+                            updatedTradesCopy = existingPortfolioData.trades.map(function (trade) {
+                                if (trade.stockSymbol === ticker) {
+                                    foundticker = true;
+                                    // Update the trade details
+                                    return __assign(__assign({}, trade), { date: new Date(formattedDate).toISOString(), quantity: trade.quantity + quantity, price: (trade.amountInvested + quantity * price) / (trade.quantity + quantity), amountInvested: trade.amountInvested + (quantity * price) });
+                                }
+                                return trade;
+                            });
+                            updatedTrades = updatedTradesCopy;
+                        }
+                        if (checkedforticker === true && foundticker === false) {
+                            newTrade = {
+                                stockSymbol: ticker,
+                                transactionType: "Buy",
+                                quantity: quantity,
+                                date: new Date(formattedDate).toISOString(),
+                                price: price,
+                                amountInvested: quantity * price,
+                                status: true
+                            };
+                            updatedTrades = __spreadArrays(existingPortfolioData.trades, [newTrade]);
+                            setcheckedForTicker(false);
+                            checkedforticker = false;
+                        }
+                        foundticker = false;
                     }
-                    return [4 /*yield*/, api_1["default"].updateUserTradeById(username, updatedTrades_1)];
+                    return [4 /*yield*/, api_1["default"].updateUserTradeById(username, updatedTrades)];
                 case 3:
                     response = _a.sent();
                     console.log("Response from PATCH request:", response);
@@ -144,14 +155,15 @@ var BuyPopup = function (_a) {
                 case 5:
                     response = _a.sent();
                     console.log("Response from POST request:", response);
-                    onClose();
                     _a.label = 6;
                 case 6:
                     onClose();
+                    navigate('/home');
                     return [3 /*break*/, 8];
                 case 7:
                     error_1 = _a.sent();
                     console.error("Error updating user trades:", error_1);
+                    navigate('/home');
                     return [3 /*break*/, 8];
                 case 8: return [2 /*return*/];
             }

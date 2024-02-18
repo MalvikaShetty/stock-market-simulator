@@ -58,11 +58,6 @@ const StocksList: React.FC<DashboardProps> = ({ username }) => {
     openPopupSell(ticker, price, date);
   };
 
-  const handleBuy = () => {
-    // Logic to handle buying the stock with the selected quantity
-    closePopup();
-  };
-
   const handleSearch = (term: string) => {
     setSearchTerm(term);
 
@@ -97,6 +92,7 @@ const StocksList: React.FC<DashboardProps> = ({ username }) => {
                 price={selectedPrice}
                 onClose={closePopup}
                 username={username}
+                // currentAmount={currentAmount} 
               />
             )}
             {showSellPopup && (

@@ -9,7 +9,7 @@ var Login = function (_a) {
     var navigate = react_router_dom_1.useNavigate();
     react_1.useEffect(function () {
         // Check if user is already logged in from browser storage
-        var storedUsername = localStorage.getItem('username');
+        var storedUsername = localStorage.getItem("username");
         if (storedUsername) {
             onLogin(storedUsername);
             setIsLoggedIn(true);
@@ -20,8 +20,8 @@ var Login = function (_a) {
         // Assuming login is successful, call onLogin callback with username
         onLogin(username);
         // Store username in browser storage to persist login state
-        localStorage.setItem('username', username);
-        navigate('/');
+        localStorage.setItem("username", username);
+        navigate("/home");
     };
     return (react_1["default"].createElement("div", { className: "min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8" },
         react_1["default"].createElement("div", { className: "max-w-md w-full space-y-8" },

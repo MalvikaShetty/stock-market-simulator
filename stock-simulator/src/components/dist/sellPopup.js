@@ -49,9 +49,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var react_1 = require("react");
 var api_1 = require("../services/api"); // Import your api module
+var react_router_dom_1 = require("react-router-dom");
 var SellPopup = function (_a) {
     var ticker = _a.ticker, price = _a.price, onClose = _a.onClose, username = _a.username;
     var _b = react_1.useState(1), quantity = _b[0], setQuantity = _b[1];
+    var navigate = react_router_dom_1.useNavigate();
     var handleQuantityChange = function (event) {
         var newQuantity = parseInt(event.target.value, 10);
         setQuantity(newQuantity);
@@ -93,6 +95,7 @@ var SellPopup = function (_a) {
                     _a.label = 5;
                 case 5:
                     onClose();
+                    navigate('/home');
                     return [3 /*break*/, 7];
                 case 6:
                     error_1 = _a.sent();

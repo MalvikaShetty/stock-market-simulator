@@ -13,3 +13,13 @@
     font-family: 'Cambria', serif;
   }
   
+  .container {
+    @apply flex justify-center items-center h-screen bg-cover;
+    background-image: url('./assets/bg-image-stocks.jpg');
+  }
+  
+  .navigation-box {
+    @apply bg-white bg-opacity-70 p-4 rounded w-[300px];
+  }
+  
+    

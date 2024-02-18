@@ -24,7 +24,6 @@ var UserRankingPage = function () {
                 var objectsWithTradesAttribute = data.filter(function (obj) { return obj.trades !== undefined && obj.trades !== null; });
                 // const usersWithTrades = response.filter((user: { hasOwnProperty: (arg0: string) => any; }) => user.hasOwnProperty('trades'));
                 setUsers(objectsWithTradesAttribute);
-                console.log(objectsWithTradesAttribute, "Users with trades");
             })["catch"](function (error) {
                 console.error("Error fetching users:", error);
             });
@@ -87,7 +86,7 @@ var UserRankingPage = function () {
                         react_1["default"].createElement("th", { className: "px-4 py-2" }, "User ID"),
                         react_1["default"].createElement("th", { className: "px-4 py-2" }, "Total Unrealized Gain/Loss"))),
                 react_1["default"].createElement("tbody", null, rankedUsers.map(function (user, index) { return (react_1["default"].createElement("tr", { key: user.userId, className: "border-t border-gray-300" },
-                    react_1["default"].createElement("td", { className: "py-2 pl-16" }, user.rank),
+                    react_1["default"].createElement("td", { className: "py-2 pl-[7.5%]" }, user.rank),
                     react_1["default"].createElement("td", { className: "py-2 pl-[10%]" }, user.userId),
                     react_1["default"].createElement("td", { className: "py-2 pl-[24%]" },
                         "$",

@@ -9,6 +9,7 @@ var dashboard_1 = require("./pages/dashboard");
 var login_1 = require("./pages/login");
 var signup_1 = require("./pages/signup");
 var ranksAll_1 = require("./pages/ranksAll");
+var landingpage_1 = require("./pages/landingpage");
 function App() {
     var _a = react_1.useState(false), isLoggedIn = _a[0], setIsLoggedIn = _a[1];
     var _b = react_1.useState(""), username = _b[0], setUsername = _b[1]; // State to store the username
@@ -20,8 +21,13 @@ function App() {
     var PAGE_ROUTES = [
         // COMMON PAGES
         {
-            name: "Home",
+            name: "Landing Page",
             path: "/",
+            component: landingpage_1["default"]
+        },
+        {
+            name: "Home",
+            path: "/home",
             component: function () { return (react_1["default"].createElement(dashboard_1["default"], { username: username })); }
         },
         {
@@ -55,6 +61,7 @@ function App() {
                     setUsername(username); // Update the username state
                     setIsLoggedIn(true); // Update the login status
                 } }) })); })),
+        react_1["default"].createElement(react_router_dom_1.Routes, null, PAGE_ROUTES.map(function (page) { return (react_1["default"].createElement(react_router_dom_1.Route, { key: "/signup", path: "/signup", element: react_1["default"].createElement(signup_1["default"], null) })); })),
         react_1["default"].createElement("div", { className: "flex" },
             react_1["default"].createElement(navigation_1["default"], { isLoggedIn: isLoggedIn, username: username, onLogout: handleLogout }),
             react_1["default"].createElement(react_router_dom_1.Routes, null, PAGE_ROUTES.map(function (page) { return (react_1["default"].createElement(react_router_dom_1.Route, { key: page.path, path: page.path, element: react_1["default"].createElement(page.component, null) })); })))));

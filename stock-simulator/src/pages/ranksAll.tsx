@@ -19,7 +19,6 @@ const UserRankingPage: React.FC = () => {
           );
           // const usersWithTrades = response.filter((user: { hasOwnProperty: (arg0: string) => any; }) => user.hasOwnProperty('trades'));
           setUsers(objectsWithTradesAttribute);
-          console.log(objectsWithTradesAttribute, "Users with trades");
         })
         .catch((error) => {
           console.error("Error fetching users:", error);
@@ -108,7 +107,7 @@ const UserRankingPage: React.FC = () => {
         <tbody>
           {rankedUsers.map((user, index) => (
             <tr key={user.userId} className="border-t border-gray-300">
-              <td className="py-2 pl-16">{user.rank}</td>
+              <td className="py-2 pl-[7.5%]">{user.rank}</td>
               <td className="py-2 pl-[10%]">{user.userId}</td>
               <td className="py-2 pl-[24%]">
                 ${user.totalUnrealizedGainLoss.toFixed(2)}

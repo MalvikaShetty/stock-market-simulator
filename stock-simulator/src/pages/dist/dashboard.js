@@ -12,12 +12,12 @@ var Dashboard = function (_a) {
     var _d = react_1.useState(true), isLoading = _d[0], setIsLoading = _d[1];
     var _e = react_1.useState([]), stockData = _e[0], setStockData = _e[1];
     var _f = react_1.useState([]), filteredStockData = _f[0], setFilteredStockData = _f[1];
+    var InitialAmount = 5000;
     react_1.useEffect(function () {
         api_1["default"]
             .getUserTradeById(username)
             .then(function (data) {
             setUserTradesData(data);
-            console.log(data);
             // setIsLoading(false);
         })["catch"](function (error) {
             console.error("Error fetching user trade data:", error);
@@ -40,7 +40,6 @@ var Dashboard = function (_a) {
     // Function to get total unrealized gain/loss of the logged user
     var totalUnrealizedGainLoss = userTradesData && userTradesData.trades
         ? userTradesData.trades.reduce(function (total, trade) {
-            console.log("Current trade:", trade);
             if (trade &&
                 trade.amountInvested != null &&
                 trade.quantity != null) {
@@ -66,124 +65,143 @@ var Dashboard = function (_a) {
     // Colors for pie chart sectors
     var COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
     var barData = [
-        { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
+        { name: "Tech", investment: 12000, "return": 18000 },
+        { name: "Finance", investment: 8000, "return": 9500 },
+        { name: "Energy", investment: 5000, "return": 6500 },
+        { name: "Consumer", investment: 7000, "return": 7300 },
     ];
     var lineData = [
-        { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
+        { month: "January", Tech: 4000, Finance: 3000, Energy: 2000, Consumer: 2500 },
+        { month: "February", Tech: 4500, Finance: 3200, Energy: 2100, Consumer: 2600 },
+        { month: "March", Tech: 4700, Finance: 3300, Energy: 2150, Consumer: 2700 },
+        { month: "April", Tech: 4800, Finance: 3400, Energy: 2200, Consumer: 2800 },
     ];
-    return (react_1["default"].createElement(react_1["default"].Fragment, null, userTradesData !== null ? (react_1["default"].createElement("div", { className: "overflow-hidden" },
-        react_1["default"].createElement("div", { className: "bg-black py-2 flex justify-between items-center" },
+    var totalInvestedAmount = 0;
+    return (react_1["default"].createElement("div", null,
+        react_1["default"].createElement("div", { className: "bg-black py-2 flex justify-between items-center w-[1400px]" },
             react_1["default"].createElement("h2", { className: "ml-4 text-white text-3xl md:text-4xl font-bold mb-4 text-center tracking-wide font-cambria" }, "Dashboard"),
             react_1["default"].createElement(react_fontawesome_1.FontAwesomeIcon, { icon: free_solid_svg_icons_1.faUser, color: "white", size: "1x", className: "mr-4" })),
-        react_1["default"].createElement("div", { className: "mt-2 pt-2" },
-            react_1["default"].createElement("div", { className: "flex justify-between items-center mb-4" },
-                react_1["default"].createElement("div", { className: "text-left ml-6" },
-                    react_1["default"].createElement("p", { className: "text-md mb-2 font-semibold" },
-                        "Amount Invested Total: $",
-                        userTradesData && userTradesData.trades
-                            ? userTradesData.trades.reduce(function (total, trade) {
-                                if (trade && trade.amountInvested != null) {
-                                    return total + trade.amountInvested;
-                                }
-                                else {
-                                    return total;
-                                }
-                            }, 0)
-                            : 0),
-                    react_1["default"].createElement("p", { className: "text-md mb-2 font-semibold" }),
-                    react_1["default"].createElement("p", { className: "text-md mb-2 font-semibold" },
-                        "Total Unrealized Gain/Loss:",
+        userTradesData !== null ? (react_1["default"].createElement("div", { className: "overflow-hidden" },
+            react_1["default"].createElement("div", { className: "mt-2 pt-2" },
+                react_1["default"].createElement("div", { className: "flex justify-between items-center mb-4" },
+                    react_1["default"].createElement("div", { className: "text-left ml-6" },
+                        react_1["default"].createElement("p", { className: "text-md mb-2 font-semibold" },
+                            "Amount Invested Total: $",
+                            (userTradesData && userTradesData.trades
+                                ? userTradesData.trades.reduce(function (total, trade) {
+                                    if (trade && trade.amountInvested != null) {
+                                        totalInvestedAmount = total + trade.amountInvested;
+                                        return totalInvestedAmount;
+                                    }
+                                    else {
+                                        return total;
+                                    }
+                                }, 0)
+                                : 0).toFixed(2)),
+                        react_1["default"].createElement("p", { className: "text-md mb-2 font-semibold" }),
+                        react_1["default"].createElement("p", { className: "text-md mb-2 font-semibold" },
+                            "Total Unrealized Gain/Loss:",
+                            " ",
+                            react_1["default"].createElement("span", { style: {
+                                    color: totalUnrealizedGainLoss < 0 ? "red" : "green"
+                                } },
+                                "$",
+                                totalUnrealizedGainLoss.toFixed(2)))),
+                    react_1["default"].createElement("div", { className: "text-right mr-6" },
+                        react_1["default"].createElement("p", { className: "text-md mb-2 font-semibold" },
+                            "Initial Amount:",
+                            " ",
+                            react_1["default"].createElement("span", { className: "font-bold" },
+                                "$",
+                                InitialAmount)),
                         " ",
-                        react_1["default"].createElement("span", { style: {
-                                color: totalUnrealizedGainLoss < 0 ? "red" : "green"
-                            } },
-                            "$",
-                            totalUnrealizedGainLoss.toFixed(2)))),
-                react_1["default"].createElement("div", { className: "text-right mr-6" },
-                    react_1["default"].createElement("p", { className: "text-md mb-2 font-semibold" },
-                        "Initial Amount:",
-                        " ",
-                        react_1["default"].createElement("span", { className: "font-bold" }, "$InitialAmountValue")),
-                    " ",
-                    react_1["default"].createElement("p", { className: "text-md font-semibold" },
-                        "Current Amount:",
-                        " ",
-                        react_1["default"].createElement("span", { className: "font-bold" }, "$CurrentAmountValue")),
-                    " ")),
-            react_1["default"].createElement("div", { className: "flex flex-col md:flex-row justify-between" },
-                react_1["default"].createElement("div", { className: "overflow-auto" },
-                    react_1["default"].createElement("div", { className: "shadow-lg m-4 p-4 border rounded-lg bg-white h-[400px] w-[810px]" },
+                        react_1["default"].createElement("p", { className: "text-md font-semibold" },
+                            "Current Amount:",
+                            " ",
+                            react_1["default"].createElement("span", { className: "font-bold" }, InitialAmount - totalInvestedAmount < 0 ? (react_1["default"].createElement("p", { className: "text-red-500 font-bold" }, "Trading not possible. Insufficient funds.")) : (react_1["default"].createElement("span", { className: "font-bold" },
+                                "$",
+                                (InitialAmount - totalInvestedAmount).toFixed(2))))),
+                        " ")),
+                react_1["default"].createElement("div", { className: "flex flex-col md:flex-row justify-between" },
+                    react_1["default"].createElement("div", { className: "shadow-lg m-4 p-4 border rounded-lg bg-white h-[400px] w-[850px]" },
                         react_1["default"].createElement("h3", { className: "text-2xl font-bold mb-4 ml-2 font-cambria" }, "Stocks Portfolio"),
-                        react_1["default"].createElement("table", { className: "min-w-full divide-y divide-gray-200" },
-                            react_1["default"].createElement("thead", { className: "bg-gray-50" },
-                                react_1["default"].createElement("tr", null,
-                                    react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Stock Symbol"),
-                                    react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Quantity"),
-                                    react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Total Amount"),
-                                    react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Average Cost Basis"),
-                                    react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Unrealized Gain/Loss"),
-                                    react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Last Transaction"))),
-                            react_1["default"].createElement("tbody", { className: "bg-white divide-y divide-gray-200" }, userTradesData.trades.length > 0 ? (userTradesData.trades.map(function (entry, index) { return (react_1["default"].createElement("tr", { key: index },
-                                react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" }, entry && entry.stockSymbol
-                                    ? entry.stockSymbol
-                                    : ""),
-                                react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500" }, entry ? entry.quantity : ""),
-                                react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500" },
-                                    "$",
-                                    entry ? entry.amountInvested.toFixed(2) : ""),
-                                react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500" },
-                                    "$",
-                                    entry && entry.quantity
-                                        ? (entry.amountInvested / entry.quantity).toFixed(2)
+                        react_1["default"].createElement("div", { className: "overflow-y-auto", style: { maxHeight: "300px" } },
+                            react_1["default"].createElement("table", { className: "min-w-full divide-y divide-gray-200" },
+                                react_1["default"].createElement("thead", { className: "bg-gray-50 sticky top-0" },
+                                    react_1["default"].createElement("tr", null,
+                                        react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Stock Symbol"),
+                                        react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Quantity"),
+                                        react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Total Amount"),
+                                        react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Average Cost Basis"),
+                                        react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Unrealized Gain/Loss"),
+                                        react_1["default"].createElement("th", { scope: "col", className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" }, "Last Transaction"))),
+                                react_1["default"].createElement("tbody", { className: "bg-white divide-y divide-gray-200" }, userTradesData.trades.length > 0 ? (userTradesData.trades.map(function (entry, index) { return (
+                                // Your rows mapping
+                                react_1["default"].createElement("tr", { key: index },
+                                    react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" }, entry && entry.stockSymbol
+                                        ? entry.stockSymbol
                                         : ""),
-                                react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm " + (entry &&
+                                    react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500" }, entry ? entry.quantity : ""),
+                                    react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500" },
+                                        "$",
+                                        entry ? entry.amountInvested.toFixed(2) : ""),
+                                    react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500" },
+                                        "$",
+                                        entry && entry.quantity
+                                            ? (entry.amountInvested / entry.quantity).toFixed(2)
+                                            : ""),
+                                    react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm " + (entry &&
+                                            entry.quantity &&
+                                            entry.stockSymbol &&
+                                            getCurrentPrice(entry.stockSymbol) !== null
+                                            ? entry.quantity *
+                                                getCurrentPrice(entry.stockSymbol) -
+                                                entry.amountInvested <
+                                                0
+                                                ? "text-red-600"
+                                                : "text-green-600"
+                                            : "") }, entry &&
                                         entry.quantity &&
                                         entry.stockSymbol &&
                                         getCurrentPrice(entry.stockSymbol) !== null
-                                        ? entry.quantity *
+                                        ? (entry.quantity *
                                             getCurrentPrice(entry.stockSymbol) -
-                                            entry.amountInvested <
-                                            0
-                                            ? "text-red-600"
-                                            : "text-green-600"
-                                        : "") }, entry &&
-                                    entry.quantity &&
-                                    entry.stockSymbol &&
-                                    getCurrentPrice(entry.stockSymbol) !== null
-                                    ? (entry.quantity *
-                                        getCurrentPrice(entry.stockSymbol) -
-                                        entry.amountInvested).toFixed(2)
-                                    : ""),
-                                react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500" }, entry ? entry.date : ""))); })) : (react_1["default"].createElement("tr", null,
-                                react_1["default"].createElement("td", { colSpan: 6, className: "px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900" }, "No portfolio data available"))))))),
-                react_1["default"].createElement("div", { className: "shadow-lg my-4 p-4 border rounded-lg bg-white flex-grow" },
-                    react_1["default"].createElement("h3", { className: "text-2xl font-bold ml-2 font-cambria" }, "Pie Chart Portfolio"),
-                    react_1["default"].createElement(recharts_1.PieChart, { width: 380, height: 330 },
-                        react_1["default"].createElement(recharts_1.Pie, { data: pieData, cx: 200, cy: 150, labelLine: false, outerRadius: 80, fill: "#8884d8", dataKey: "value", label: function (_a) {
-                                var name = _a.name, percent = _a.percent;
-                                return name + " " + (percent * 100).toFixed(0) + "%";
-                            } }, pieData.map(function (entry, index) { return (react_1["default"].createElement(recharts_1.Cell, { key: "cell-" + index, fill: COLORS[index % COLORS.length] })); })),
-                        react_1["default"].createElement(recharts_1.Tooltip, null),
-                        react_1["default"].createElement(recharts_1.Legend, null)))),
-            react_1["default"].createElement("div", { className: "flex flex-col md:flex-row justify-between" },
-                react_1["default"].createElement("div", { className: "shadow-3d m-4 p-4 border rounded-lg bg-white flex-grow" },
-                    react_1["default"].createElement("h3", { className: "text-2xl font-bold mb-4 ml-2 font-cambria" }, "Bar Chart"),
-                    react_1["default"].createElement(recharts_1.BarChart, { width: 400, height: 300, data: barData },
-                        react_1["default"].createElement(recharts_1.CartesianGrid, { strokeDasharray: "3 3" }),
-                        react_1["default"].createElement(recharts_1.XAxis, { dataKey: "name" }),
-                        react_1["default"].createElement(recharts_1.YAxis, null),
-                        react_1["default"].createElement(recharts_1.Tooltip, null),
-                        react_1["default"].createElement(recharts_1.Legend, null),
-                        react_1["default"].createElement(recharts_1.Bar, { dataKey: "pv", fill: "#8884d8" }),
-                        react_1["default"].createElement(recharts_1.Bar, { dataKey: "uv", fill: "#82ca9d" }))),
-                react_1["default"].createElement("div", { className: "shadow-3d m-4 p-4 border rounded-lg bg-white flex-grow" },
-                    react_1["default"].createElement("h3", { className: "text-2xl font-bold ml-2 font-cambria mb-4" }, "Line Chart Portfolio"),
-                    react_1["default"].createElement(recharts_1.LineChart, { width: 400, height: 300, data: lineData },
-                        react_1["default"].createElement(recharts_1.XAxis, { dataKey: "name" }),
-                        react_1["default"].createElement(recharts_1.YAxis, null),
-                        react_1["default"].createElement(recharts_1.Tooltip, null),
-                        react_1["default"].createElement(recharts_1.Legend, null),
-                        react_1["default"].createElement(recharts_1.Line, { type: "monotone", dataKey: "pv", stroke: "#8884d8" }),
-                        react_1["default"].createElement(recharts_1.Line, { type: "monotone", dataKey: "uv", stroke: "#82ca9d" }))))))) : (react_1["default"].createElement("h2", null, "No Data Yet"))));
+                                            entry.amountInvested).toFixed(2)
+                                        : ""),
+                                    react_1["default"].createElement("td", { className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500" }, entry ? entry.date : ""))); })) : (react_1["default"].createElement("tr", null,
+                                    react_1["default"].createElement("td", { colSpan: 6, className: "px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900" }, "No portfolio data available"))))))),
+                    react_1["default"].createElement("div", { className: "shadow-lg my-4 p-4 border rounded-lg bg-white flex-grow" },
+                        react_1["default"].createElement("h3", { className: "text-2xl font-bold ml-2 font-cambria" }, "Pie Chart Portfolio"),
+                        react_1["default"].createElement(recharts_1.PieChart, { width: 380, height: 330 },
+                            react_1["default"].createElement(recharts_1.Pie, { data: pieData, cx: 200, cy: 150, labelLine: false, outerRadius: 80, fill: "#8884d8", dataKey: "value", label: function (_a) {
+                                    var name = _a.name, percent = _a.percent;
+                                    return name + " " + (percent * 100).toFixed(0) + "%";
+                                } }, pieData.map(function (entry, index) { return (react_1["default"].createElement(recharts_1.Cell, { key: "cell-" + index, fill: COLORS[index % COLORS.length] })); })),
+                            react_1["default"].createElement(recharts_1.Tooltip, null),
+                            react_1["default"].createElement(recharts_1.Legend, null)))),
+                react_1["default"].createElement("div", { className: "flex flex-col md:flex-row justify-between" },
+                    react_1["default"].createElement("div", { className: "shadow-3d m-4 p-4 border rounded-lg bg-white flex-grow" },
+                        react_1["default"].createElement("h3", { className: "text-2xl font-bold mb-4 ml-2 font-cambria" }, "Bar Chart"),
+                        react_1["default"].createElement(recharts_1.BarChart, { width: 400, height: 300, data: barData },
+                            react_1["default"].createElement(recharts_1.CartesianGrid, { strokeDasharray: "3 3" }),
+                            react_1["default"].createElement(recharts_1.XAxis, { dataKey: "name" }),
+                            react_1["default"].createElement(recharts_1.YAxis, null),
+                            react_1["default"].createElement(recharts_1.Tooltip, null),
+                            react_1["default"].createElement(recharts_1.Legend, null),
+                            react_1["default"].createElement(recharts_1.Bar, { dataKey: "investment", fill: "#8884d8" }),
+                            react_1["default"].createElement(recharts_1.Bar, { dataKey: "return", fill: "#82ca9d" }))),
+                    react_1["default"].createElement("div", { className: "shadow-3d m-4 p-4 border rounded-lg bg-white flex-grow" },
+                        react_1["default"].createElement("h3", { className: "text-2xl font-bold ml-2 font-cambria mb-4" }, "Line Chart Portfolio"),
+                        react_1["default"].createElement(recharts_1.LineChart, { width: 400, height: 300, data: lineData },
+                            react_1["default"].createElement(recharts_1.XAxis, { dataKey: "month" }),
+                            react_1["default"].createElement(recharts_1.YAxis, null),
+                            react_1["default"].createElement(recharts_1.Tooltip, null),
+                            react_1["default"].createElement(recharts_1.Legend, null),
+                            react_1["default"].createElement(recharts_1.Line, { type: "monotone", dataKey: "Tech", stroke: "#8884d8" }),
+                            react_1["default"].createElement(recharts_1.Line, { type: "monotone", dataKey: "Finance", stroke: "#82ca9d" }),
+                            react_1["default"].createElement(recharts_1.Line, { type: "monotone", dataKey: "Energy", stroke: "#ca82a4" }),
+                            react_1["default"].createElement(recharts_1.Line, { type: "monotone", dataKey: "Consumer", stroke: "#ccc349" }))))))) : (react_1["default"].createElement(react_1["default"].Fragment, null,
+            react_1["default"].createElement("h2", { className: "ml-[40%] font-bold text-[40px] font-cambria" }, "No Data Yet"),
+            react_1["default"].createElement("p", { className: "ml-[43%] font-cambria" }, "Buy some stocks")))));
 };
 exports["default"] = Dashboard;

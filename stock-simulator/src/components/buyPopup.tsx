@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
+import { useNavigate } from 'react-router-dom';
 
 interface PopupProps {
   ticker: string;
   price: number;
   onClose: () => void;
   username: string;
+  // currentAmount?: number;
 }
 
 const BuyPopup: React.FC<PopupProps> = ({ ticker, price, onClose, username }) => {
   const [quantity, setQuantity] = useState<number>(1);
+  const [checkedForTicker, setcheckedForTicker] = useState(false);
+  let checkedforticker = false;
+  let foundticker = false;
+  const navigate = useNavigate();
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newQuantity = parseInt(event.target.value, 10);
@@ -27,14 +33,12 @@ const BuyPopup: React.FC<PopupProps> = ({ ticker, price, onClose, username }) =>
 const handleBuyClick = async () => {
   try {
       const existingPortfolioStatus = await api.getUserTradeStatusById(username);
-      console.log(existingPortfolioStatus, "existingPortfolioStatus")
 
       if (existingPortfolioStatus === true) {
         // Portfolio exists, update trades
         const existingPortfolioData = await api.getUserTradeById(username);
         let updatedTrades;
         if(existingPortfolioData.trades.length === 0){
-          console.log(ticker, "ticke")
           updatedTrades = [
             ...existingPortfolioData.trades,
             {
@@ -48,37 +52,47 @@ const handleBuyClick = async () => {
             }
           ];
         }else{
-          updatedTrades = existingPortfolioData.trades.map((trade : any) => {
-            if (trade.stockSymbol === ticker) {
-              console.log(ticker, "tick")
-                // If the stockSymbol matches, update the trade
-                return {
-                    ...trade,
-                    date: new Date(formattedDate).toISOString(),
-                    quantity: trade.quantity + quantity,
-                    price: (trade.amountInvested + quantity * price) / (trade.quantity + quantity),
-                    amountInvested: trade.amountInvested + (quantity * price),
-                };
-            } else {
-              console.log(ticker, "tickerrrr")
-                updatedTrades = [
-                  ...existingPortfolioData.trades,
-                  {
-                      stockSymbol: ticker,
-                      transactionType: "Buy",
-                      quantity: quantity,
-                      date: new Date(formattedDate).toISOString(), // Convert date to ISO string
-                      price: price,
-                      amountInvested: quantity * price,
-                      status: true
-                  }
-              ];
-            }
-        });
-        }
-        const response = await api.updateUserTradeById(username, updatedTrades);
-        console.log("Response from PATCH request:", response);
+          console.log(checkedforticker, "first check");
+          if(checkedforticker === false && foundticker === false){
+            checkedforticker = true;
+            // setcheckedForTicker(true);
+            const updatedTradesCopy = existingPortfolioData.trades.map((trade: any) => {
+              if (trade.stockSymbol === ticker) {
+                  foundticker = true;
+                  // Update the trade details
+                  return {
+                      ...trade,
+                      date: new Date(formattedDate).toISOString(),
+                      quantity: trade.quantity + quantity,
+                      price: (trade.amountInvested + quantity * price) / (trade.quantity + quantity),
+                      amountInvested: trade.amountInvested + (quantity * price),
+                  };
+              }
+              return trade;
+          });
+          updatedTrades = updatedTradesCopy;
+          } 
+          if(checkedforticker === true && foundticker === false){
+            const newTrade = {
+                stockSymbol: ticker,
+                transactionType: "Buy",
+                quantity: quantity,
+                date: new Date(formattedDate).toISOString(),
+                price: price,
+                amountInvested: quantity * price,
+                status: true
+            };
+            updatedTrades = [...existingPortfolioData.trades, newTrade]; 
+              setcheckedForTicker(false);
+              checkedforticker = false;
+            } 
+            foundticker = false;
+    }  
+      // Now updatedTrades contains either the updated trade or includes a new trade
+      const response = await api.updateUserTradeById(username, updatedTrades);
+      console.log("Response from PATCH request:", response);
     }
+  
     else {
           // Portfolio doesn't exist, create new
           const data = {
@@ -97,14 +111,14 @@ const handleBuyClick = async () => {
           };
           const response = await api.postUserTrades(data);
           console.log("Response from POST request:", response);
-          onClose();
       }
       onClose();
+      navigate('/home');
   } catch (error) {
       console.error("Error updating user trades:", error);
+      navigate('/home');
   }
 };
-
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
@@ -129,6 +143,7 @@ const handleBuyClick = async () => {
           <button
             className="px-4 py-2 bg-black text-white rounded-lg"
             onClick={handleBuyClick}
+
           >
             Buy
           </button>

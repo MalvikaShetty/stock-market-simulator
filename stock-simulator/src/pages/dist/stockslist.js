@@ -50,10 +50,6 @@ var StocksList = function (_a) {
         var price = ((_a = stockData.find(function (dataPoint) { return dataPoint.T === ticker; })) === null || _a === void 0 ? void 0 : _a.c) || 0;
         openPopupSell(ticker, price, date);
     };
-    var handleBuy = function () {
-        // Logic to handle buying the stock with the selected quantity
-        closePopup();
-    };
     var handleSearch = function (term) {
         setSearchTerm(term);
         // Filter stockData based on search term
