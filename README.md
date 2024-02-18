@@ -2,6 +2,11 @@
 
 This application functions as a simulated stock trading platform, providing users with an initial virtual budget to buy and sell stocks. Participants can track their profits or losses and see how they rank against other players. It offers an engaging way to practice trading strategies and compete within a virtual marketplace.
 
+## File Structure-
+
+##### _stock-market-simulator_ folder - Spring
+##### _stock-simulator_ folder - React App
+
 ## Installations
 ### Java Spring
 #### On Windows-
