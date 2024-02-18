@@ -25,7 +25,6 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ username }) => {
   const [userTradesData, setUserTradesData] = useState<any>(null);
-  const [portfolioData, setPortfolioData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stockData, setStockData] = useState<Array<any>>([]);
   const [filteredStockData, setFilteredStockData] = useState<Array<any>>([]);

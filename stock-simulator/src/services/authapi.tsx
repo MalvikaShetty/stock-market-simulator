@@ -36,12 +36,6 @@ const authapi = {
     return response.json(); // You may or may not receive a response from the logout endpoint
   },
 
-
-
-  
-  // Other API functions for stocks and user trades...
-
-
 };
 
 export default authapi;

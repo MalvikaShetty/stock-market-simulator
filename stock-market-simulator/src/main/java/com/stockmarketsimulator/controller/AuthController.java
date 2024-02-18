@@ -14,7 +14,6 @@ import java.security.NoSuchAlgorithmException;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     private final UserService userService;
 
     @Autowired
@@ -30,10 +29,8 @@ public class AuthController {
         String hashedPassword = hashPassword(user.getPassword());
         user.setPassword(hashedPassword);
         userService.saveUser(user);
-//        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
         return ResponseEntity.status(HttpStatus.CREATED).body("{\"message\": \"User registered successfully\"}");
     }
-
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user) {

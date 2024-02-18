@@ -69,7 +69,6 @@ var SellPopup = function (_a) {
                     return [4 /*yield*/, api_1["default"].getUserTradeStatusById(username)];
                 case 1:
                     existingPortfolioStatus = _a.sent();
-                    console.log(existingPortfolioStatus, "existingPortfolioStatus");
                     if (!(existingPortfolioStatus === true)) return [3 /*break*/, 4];
                     return [4 /*yield*/, api_1["default"].getUserTradeById(username)];
                 case 2:

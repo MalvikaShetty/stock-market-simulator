@@ -52,7 +52,6 @@ const handleBuyClick = async () => {
             }
           ];
         }else{
-          console.log(checkedforticker, "first check");
           if(checkedforticker === false && foundticker === false){
             checkedforticker = true;
             // setcheckedForTicker(true);

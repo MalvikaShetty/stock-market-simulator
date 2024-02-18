@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-
     private final UserService userService;
 
     @Autowired
@@ -44,9 +43,8 @@ public class UserController {
         }
     }
 
-
     @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable String id){
+    public String deleteUser(@PathVariable String id) {
         userService.deleteById(id);
 
         return "Deleted Successfully";

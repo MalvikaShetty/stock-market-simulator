@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var BASE_URL = 'http://localhost:8080/api';
+var BASE_URL = "http://localhost:8080/api";
 var api = {
     getStocks: function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
@@ -46,7 +46,7 @@ var api = {
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return [2 /*return*/, response.json()];
             }
@@ -60,7 +60,7 @@ var api = {
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return [2 /*return*/, response.json()];
             }
@@ -74,7 +74,7 @@ var api = {
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return [2 /*return*/, response.json()];
             }
@@ -88,7 +88,7 @@ var api = {
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return [2 /*return*/, response.json()];
             }
@@ -102,7 +102,7 @@ var api = {
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return [2 /*return*/, response.json()];
             }
@@ -116,48 +116,7 @@ var api = {
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return [2 /*return*/, response.json()];
-            }
-        });
-    }); },
-    updateUserTradeById: function (userId, updatedTrade) { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, fetch(BASE_URL + "/updatetrade/" + userId, {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(updatedTrade)
-                    })];
-                case 1:
-                    response = _a.sent();
-                    console.log(JSON.stringify(updatedTrade));
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return [2 /*return*/, response.json()];
-            }
-        });
-    }); },
-    getPortfolioById: function (userid) { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    console.log(userid);
-                    return [4 /*yield*/, fetch(BASE_URL + "/getportfoliosbyuserid/" + userid, {
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })];
-                case 1:
-                    response = _a.sent();
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return [2 /*return*/, response.json()];
             }
@@ -168,66 +127,42 @@ var api = {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, fetch(BASE_URL + "/addusertrades", {
-                        method: 'POST',
+                        method: "POST",
                         headers: {
-                            'Content-Type': 'application/json'
+                            "Content-Type": "application/json"
                         },
                         body: JSON.stringify(postData)
                     })];
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return [2 /*return*/, response.json()];
             }
         });
     }); },
-    updateUserPortfolioById: function (id, updatedPortfolio) { return __awaiter(void 0, void 0, void 0, function () {
+    updateUserTradeById: function (userId, updatedTrade) { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, fetch(BASE_URL + "/updateportfolio/" + id, {
-                        method: 'PATCH',
+                case 0: return [4 /*yield*/, fetch(BASE_URL + "/updatetrade/" + userId, {
+                        method: "PATCH",
                         headers: {
-                            'Content-Type': 'application/json'
+                            "Content-Type": "application/json"
                         },
-                        body: JSON.stringify(updatedPortfolio)
+                        body: JSON.stringify(updatedTrade)
                     })];
                 case 1:
                     response = _a.sent();
+                    console.log(JSON.stringify(updatedTrade));
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return [2 /*return*/, response.json()];
             }
         });
     }); },
-    updateUserPortfolioStockOnSell: function (userId, stockSymbol, newQuantity, newUpdateDate) { return __awaiter(void 0, void 0, void 0, function () {
-        var queryString, url, response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    queryString = "quantity=" + newQuantity + "&updateDate=" + encodeURIComponent(newUpdateDate);
-                    url = BASE_URL + "/updateportfolio/" + userId + "/" + stockSymbol + "?" + queryString;
-                    return [4 /*yield*/, fetch(url, {
-                            method: 'PATCH',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })];
-                case 1:
-                    response = _a.sent();
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return [2 /*return*/, response.json()];
-            }
-        });
-    }); },
-    // updateStatusUserTradesData : async (userId) =>{
-    //   api.updatesellstatus(userId);
-    // }
     updateStatusUserTradesData: function (userId) { return __awaiter(void 0, void 0, void 0, function () {
         var response, responseData, error_1;
         return __generator(this, function (_a) {
@@ -235,15 +170,15 @@ var api = {
                 case 0:
                     _a.trys.push([0, 3, , 4]);
                     return [4 /*yield*/, fetch(BASE_URL + "/updatesellstatus/" + userId, {
-                            method: 'PATCH',
+                            method: "PATCH",
                             headers: {
-                                'Content-Type': 'application/json'
+                                "Content-Type": "application/json"
                             }
                         })];
                 case 1:
                     response = _a.sent();
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return [4 /*yield*/, response.json()];
                 case 2:
@@ -251,12 +186,11 @@ var api = {
                     return [2 /*return*/, responseData];
                 case 3:
                     error_1 = _a.sent();
-                    console.error('Error updating status:', error_1);
+                    console.error("Error updating status:", error_1);
                     throw error_1;
                 case 4: return [2 /*return*/];
             }
         });
     }); }
-    // Other API functions for stocks and user trades...
 };
 exports["default"] = api;

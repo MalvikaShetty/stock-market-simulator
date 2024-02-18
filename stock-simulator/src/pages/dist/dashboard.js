@@ -8,10 +8,9 @@ var free_solid_svg_icons_1 = require("@fortawesome/free-solid-svg-icons");
 var Dashboard = function (_a) {
     var username = _a.username;
     var _b = react_1.useState(null), userTradesData = _b[0], setUserTradesData = _b[1];
-    var _c = react_1.useState([]), portfolioData = _c[0], setPortfolioData = _c[1];
-    var _d = react_1.useState(true), isLoading = _d[0], setIsLoading = _d[1];
-    var _e = react_1.useState([]), stockData = _e[0], setStockData = _e[1];
-    var _f = react_1.useState([]), filteredStockData = _f[0], setFilteredStockData = _f[1];
+    var _c = react_1.useState(true), isLoading = _c[0], setIsLoading = _c[1];
+    var _d = react_1.useState([]), stockData = _d[0], setStockData = _d[1];
+    var _e = react_1.useState([]), filteredStockData = _e[0], setFilteredStockData = _e[1];
     var InitialAmount = 5000;
     react_1.useEffect(function () {
         api_1["default"]

@@ -102,7 +102,6 @@ var BuyPopup = function (_a) {
                         ]);
                     }
                     else {
-                        console.log(checkedforticker, "first check");
                         if (checkedforticker === false && foundticker === false) {
                             checkedforticker = true;
                             updatedTradesCopy = existingPortfolioData.trades.map(function (trade) {

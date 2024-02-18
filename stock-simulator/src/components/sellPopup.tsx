@@ -31,7 +31,6 @@ const SellPopup: React.FC<PopupProps> = ({
       const existingPortfolioStatus = await api.getUserTradeStatusById(
         username
       );
-      console.log(existingPortfolioStatus, "existingPortfolioStatus");
 
       if (existingPortfolioStatus === true) {
         // Portfolio exists, update trades

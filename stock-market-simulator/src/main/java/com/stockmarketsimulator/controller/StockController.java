@@ -20,10 +20,6 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class StockController {
 
-//    @Autowired
-//    private UserTradeRepository repo;
-
-
     private final UserTradesService userTradesService;
 
     @Autowired
@@ -38,20 +34,6 @@ public class StockController {
         userTradesService.saveUserTrade(userTrades);
         return ResponseEntity.ok("User trades added successfully");
     }
-
-//    @PostMapping("/addusertrades")
-//    public ResponseEntity<String> addUserTrades(
-//            @PathVariable Long userId,
-//            @RequestBody List<UserTrades> userTradesList) {
-//
-//        for (UserTrades userTrades : userTradesList) {
-//            // Set the userId for each userTrade
-////            userTrades.setUserId(userId);
-//            userTradesService.saveUserTrade(userTrades);
-//        }
-//
-//        return ResponseEntity.ok("User trades added successfully");
-//    }
 
     @GetMapping("/alltrades")
     public List<UserTrades> getAllUserTrades() {
@@ -80,83 +62,23 @@ public class StockController {
         }
     }
 
+    @PatchMapping("/updatetrade/{userId}")
+    public ResponseEntity<UserTrades> updateUserTrades(@PathVariable String userId, @RequestBody List<UserTrades.Trade> trades) {
+        // Check if the user's portfolio exists
+        Optional<UserTrades> existingPortfolio = Optional.ofNullable(userTradesService.getUserTradesById(userId));
+        if (existingPortfolio.isPresent()) {
+            // Portfolio exists, update the trades
+            UserTrades userTrades = existingPortfolio.get();
 
-    @PutMapping("/trade/{userId}")
-    public ResponseEntity<UserTrades> updateUserTrades(@PathVariable String userId, @RequestBody UserTrades updatedUserTrades) {
-        UserTrades existingUserTrades = userTradesService.getUserTradesById(userId);
+            // Clear existing trades and add new trades
+            userTrades.setTrades(trades);
 
-        if (existingUserTrades != null) {
-            // Update the user trades properties based on updatedUserTrades
-            existingUserTrades.setUserId(updatedUserTrades.getUserId());
-//            existingUserTrades.setAmountDeposited(updatedUserTrades.getAmountDeposited());
-            existingUserTrades.setTrades(updatedUserTrades.getTrades());
-
-            // Update other properties as needed
-            // existingUserTrades.setProperty(updatedUserTrades.getProperty());
-
-            userTradesService.saveUserTrade(existingUserTrades); // Save the updated user trades
-
-            return ResponseEntity.ok(existingUserTrades);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-//    @PatchMapping("/updatetrade/{userId}")
-//    public ResponseEntity<UserTrades> updateUserTrades(@PathVariable String userId, @RequestBody Map<String, Object> updates) {
-//        UserTrades userTrades = userTradesService.updateUserTrades(userId, updates);
-//
-//        if (userTrades != null) {
-//            return ResponseEntity.ok(userTrades);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-@PatchMapping("/updatetrade/{userId}")
-public ResponseEntity<UserTrades> updateUserTrades(@PathVariable String userId, @RequestBody List<UserTrades.Trade> trades) {
-    // Check if the user's portfolio exists
-    Optional<UserTrades> existingPortfolio = Optional.ofNullable(userTradesService.getUserTradesById(userId));
-    if (existingPortfolio.isPresent()) {
-        // Portfolio exists, update the trades
-        UserTrades userTrades = existingPortfolio.get();
-
-        // Clear existing trades and add new trades
-        userTrades.setTrades(trades);
-
-        // Save the updated user trades
-        UserTrades updatedUserTrades = userTradesService.saveUserTrade(userTrades);
-        return ResponseEntity.ok(updatedUserTrades);
-    } else {
-        // Portfolio doesn't exist, return not found response or handle accordingly
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    }
-}
-
-
-
-
-//    @PatchMapping("/updatetradestatus/{userId}/{tradeId}")
-//    public ResponseEntity<UserTrades> updateTradeStatus(
-//            @PathVariable String userId,
-//            @RequestParam boolean status
-//    ) {
-//        UserTrades userTrades = userTradesService.updateTradeStatus(userId, status);
-//
-//        if (userTrades != null) {
-//            return ResponseEntity.ok(userTrades);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-
-    @PatchMapping("/updatesellstatus/{userId}")
-    public ResponseEntity<UserTrades> updateStatusForLastSellTrade(@PathVariable String userId) {
-        UserTrades updatedUserTrades = userTradesService.updateStatusForLastSellTrade(userId);
-
-        if (updatedUserTrades != null) {
+            // Save the updated user trades
+            UserTrades updatedUserTrades = userTradesService.saveUserTrade(userTrades);
             return ResponseEntity.ok(updatedUserTrades);
         } else {
-            return ResponseEntity.notFound().build();
+            // Portfolio doesn't exist, return not found response or handle accordingly
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -175,8 +97,7 @@ public ResponseEntity<UserTrades> updateUserTrades(@PathVariable String userId, 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = date.format(formatter);
 
-        String url = "https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/"
-                + "2024-02-16?adjusted=true&apiKey=" + apiKey;
+        String url = "https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/" + formattedDate + "?adjusted=true&apiKey=" + apiKey;
 
         try {
             String responseBody = restTemplate.getForObject(url, String.class);
