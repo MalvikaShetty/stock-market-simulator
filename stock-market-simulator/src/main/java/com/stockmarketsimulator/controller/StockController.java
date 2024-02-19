@@ -92,7 +92,7 @@ public class StockController {
     public ResponseEntity<String> fetchData() {
         RestTemplate restTemplate = new RestTemplate();
 
-        String apiKey = "1TFBB3MQprW8K7Tsp6T765byKyLokbAZ";
+        String apiKey = "your key";
         LocalDate date = LocalDate.now().minusDays(1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = date.format(formatter);
