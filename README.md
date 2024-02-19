@@ -1,4 +1,4 @@
-# Stock Market Simulator- Java Spring, Maven and ReactJs
+# Stock Market Simulator- Java Spring, Maven, ReactJs and MongoDb
 
 This application functions as a simulated stock trading platform, providing users with an initial virtual budget to buy and sell stocks. Participants can track their profits or losses and see how they rank against other players. It offers an engaging way to practice trading strategies and compete within a virtual marketplace.
 
@@ -55,6 +55,10 @@ Import your project into the IDE to start development.
 ```
 npm start
 ```
+## API call
+
+I used https://polygon.io/ API to get the Grouped Stocks information based on date. The API gives the data of all the stocks for the Current Date.
+
 ## Landing Page-
 http://localhost:3000/
 ![image](https://github.com/MalvikaShetty/stock-market-simulator/assets/66647891/14d91509-39ca-4294-a609-b83eaa5c768b)
