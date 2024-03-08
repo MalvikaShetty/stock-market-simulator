@@ -85,3 +85,7 @@ http://localhost:3000/login
 http://localhost:3000/signup
 ![image](https://github.com/MalvikaShetty/stock-market-simulator/assets/66647891/0d706ce1-e309-4750-a16c-0e45ad637ed2)
 
+### Future Enhancements
+- **Risk Management Tools:** Provide users with risk management tools such as risk assessment quizzes, volatility analysis, and portfolio stress testing. Encourage users to practice responsible investing and understand the risks associated with trading.
+- **Social Features:** Add social features to the platform, such as the ability to follow other traders. Users can share their trading strategies, discuss market trends.
+- **Educational Resources:** Incorporate educational resources such as tutorials, articles, and videos to help users learn about investing, trading strategies, fundamental analysis, and technical analysis.
