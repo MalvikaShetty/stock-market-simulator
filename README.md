@@ -1,4 +1,4 @@
-# Stock Market Simulator- Java Spring, Maven, ReactJs and MongoDb
+# Stock Market Simulator- Java Spring Boot, Maven, ReactJs and MongoDb
 
 This application functions as a simulated stock trading platform, providing users with an initial virtual budget to buy and sell stocks. Participants can track their profits or losses and see how they rank against other players. It offers an engaging way to practice trading strategies and compete within a virtual marketplace.
 
